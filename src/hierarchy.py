@@ -98,3 +98,11 @@ REGIONS = ["NR", "WR", "SR", "ER", "NER"]
 def build_summing_matrix():
     """TODO (Day 15): build the full S matrix from REGION_MEMBERS + Other node."""
     raise NotImplementedError("Implement on Day 15 per README Section 5.3")
+
+# WR outlier finding (2015-01-19): state-level breakdown appears
+# systematically scaled down (states sum to ~307 vs region total 909;
+# e.g. Maharashtra=104 vs its typical 300-400+ range) -- distinct from
+# both the NR (missing breakdown) and NER (single corrupted value)
+# patterns. Root cause not fully determined; treat this date's state-
+# level values as unreliable for state-level training, use region
+# total as-is for region/national training.
