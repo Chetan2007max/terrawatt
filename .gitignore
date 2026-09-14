@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Data (don't commit large raw data)
+data/raw/*.csv
+data/raw/*.xlsx
+data/processed/*.csv
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Models
+models/artifacts/*.pkl
+models/artifacts/*.joblib
+models/artifacts/*.txt
+!models/artifacts/.gitkeep
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Env
+.env
+
+# OS
+.DS_Store
