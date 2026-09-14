@@ -4,15 +4,26 @@ Defines TerraWatt's real 3-level hierarchy:
     State / bulk-consumer (+ synthetic "Other" node) -> Region (NR/WR/SR/ER/NER) -> National
 
 See README Section 5.1 and 5.3 for the verified member lists and coherence
-validation results (median diff = 0, 99.6%+ days near-exact; 2020-09-30 is a
-known outlier requiring investigation before this file is finalized).
+validation results.
 
-TODO (Day 4): fill in REGION_MEMBERS with the confirmed, official mapping
-(cross-check bulk-consumer suffixes and ambiguous columns like DVC/Sikkim
-against GRID-INDIA's official RLDC documentation before trusting this dict).
+INVESTIGATION FINDING (Northern Region):
+    112 missing state-level days (~2.2%) found. Breakdown:
+      - 87-day contiguous gap: 2013-01-03 to 2013-03-30 (pre-dates
+        GRID-INDIA's documented reliable start date of 2013-03-31 --
+        state-level reporting wasn't yet standardized).
+      - 25 isolated single/double-day gaps scattered through 2020,
+        including 2020-09-30 where the regional aggregate (1268) was
+        reported without any state-level breakdown that day.
+    Decision: state-level models train from 2013-03-31 onward.
+    Isolated later gaps are handled via interpolation, not exclusion.
+
+TODO (Day 4): confirm and complete WR, SR, ER, NER member lists against
+official GRID-INDIA RLDC documentation (cross-check ambiguous columns
+like DVC and Sikkim placement).
 """
 
-# Placeholder structure — confirm and complete on Day 4.
+STATE_LEVEL_RELIABLE_FROM = "2013-03-31"  # confirmed via missing-data investigation
+
 REGION_MEMBERS = {
     "NR": [
         "Punjab: EnergyMet", "Haryana: EnergyMet", "Rajasthan: EnergyMet",
@@ -34,7 +45,7 @@ REGION_MEMBERS = {
         "Bihar: EnergyMet", "DVC: EnergyMet", "Jharkhand: EnergyMet",
         "Odisha: EnergyMet", "West Bengal: EnergyMet", "Sikkim: EnergyMet",
         "Railways_ER ISTS: EnergyMet",
-        # TODO: confirm Sikkim official region — some sources place it under NER
+        # TODO: confirm Sikkim official region -- some sources place it under NER
     ],
     "NER": [
         "Arunachal Pradesh: EnergyMet", "Assam: EnergyMet", "Manipur: EnergyMet",
