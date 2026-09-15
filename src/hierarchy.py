@@ -71,10 +71,18 @@ REGION_MEMBERS = {
     ],
     "WR": [
         "Chhattisgarh: EnergyMet", "Gujarat: EnergyMet", "MP: EnergyMet",
-        "Maharashtra: EnergyMet", "Goa: EnergyMet", "DD: EnergyMet",
-        "DNH: EnergyMet", "Essar steel: EnergyMet",
+        "Maharashtra: EnergyMet", "Goa: EnergyMet",
         "AMNSIL: EnergyMet", "DNHDDPDCL: EnergyMet",
         "BALCO: EnergyMet", "RIL JAMNAGAR: EnergyMet",
+        # NOTE: DD, DNH, Essar steel deliberately EXCLUDED as standalone
+        # leaves. They have a multi-year reporting gap extending to
+        # 2026-05-15 (confirmed via last-NaN-date check), which would
+        # force the whole-hierarchy reconciliation test window down to
+        # ~4 months if kept separate. All three are small-magnitude
+        # (mean EnergyMet 0.26-0.81), so their contribution is instead
+        # absorbed into the Other_WR residual node by construction
+        # (Other_WR = WR total - sum(these 9 tracked members)), keeping
+        # the full 2025-01-01+ test window usable for reconciliation.
     ],
     "SR": [
         "Andhra Pradesh: EnergyMet", "Karnataka: EnergyMet", "Kerala: EnergyMet",
