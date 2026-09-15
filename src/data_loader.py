@@ -5,18 +5,15 @@ See README Section 5.1 for verified dataset details.
 
 Cleaning logic incorporates every data-quality finding from the
 investigation phase (see src/hierarchy.py docstring for full details):
-  - NER: EnergyMet on 2014-11-25 is a corrupted value -> set to NaN, interpolate
+  - Assam: EnergyMet on 2014-11-25 is a corrupted value (1190 vs its
+    normal ~18-21 range) -> set to NaN, interpolate
   - WR state-level columns on 2015-01-19 show a scaling anomaly -> set to NaN, interpolate
-  - CORRECTED FINDING: the early-2013 gap (2013-01-03 to 2013-03-30, ~87
-    days) affects STATE, REGION, and NATIONAL columns simultaneously --
-    not just state-level as first assumed. This matches the source's own
-    disclosed count of ~111 missing region/national days (87 from this
-    blackout + ~24 separate later isolated gaps). Left entirely as NaN,
-    not interpolated -- a bug in an earlier version of this function
-    partially filled the first 3 rows of this gap with fabricated values
-    by bridging two points ~90 days apart; fixed by checking true
-    contiguous gap length before allowing interpolation.
-  - ~24 separate isolated single/double-day gaps elsewhere -> interpolated
+  - The early-2013 gap (2013-01-03 to 2013-03-30, ~87 days) affects
+    STATE, REGION, and NATIONAL columns simultaneously - a genuine
+    reporting blackout, not just a state-level issue. Left entirely
+    as NaN (not interpolated); flagged via an explicit
+    is_data_reliable column rather than silently dropped.
+  - ~24 other isolated single/double-day gaps elsewhere -> interpolated
 """
 
 import pandas as pd
@@ -50,16 +47,23 @@ KNOWN_BAD_VALUES = [
 
 
 def load_raw_data(path_or_url: str = POSOCO_URL) -> pd.DataFrame:
-    """Load the raw POSOCO daily dataset and parse the date column."""
+    """
+    Load the raw POSOCO daily dataset and parse the date column.
+    Renames the source column "yyyymmdd" to "date" after parsing,
+    since the parsed column becomes a proper datetime (2013-01-02
+    format) and "yyyymmdd" would be a misleading name once saved
+    back out to CSV.
+    """
     df = pd.read_csv(path_or_url)
     df["yyyymmdd"] = pd.to_datetime(df["yyyymmdd"], format="%Y%m%d")
-    df = df.sort_values("yyyymmdd").reset_index(drop=True)
+    df = df.rename(columns={"yyyymmdd": "date"})
+    df = df.sort_values("date").reset_index(drop=True)
     return df
 
 
 def validate_date_range(df: pd.DataFrame) -> None:
     """Sanity check: confirm the date range matches what was verified in README Section 5.1."""
-    min_date, max_date = df["yyyymmdd"].min(), df["yyyymmdd"].max()
+    min_date, max_date = df["date"].min(), df["date"].max()
     print(f"Date range: {min_date.date()} to {max_date.date()}")
     print(f"Total rows: {len(df)}")
 
@@ -68,7 +72,7 @@ def apply_known_bad_value_fixes(df: pd.DataFrame) -> pd.DataFrame:
     """Set confirmed-bad values to NaN so they get interpolated cleanly."""
     df = df.copy()
     for fix in KNOWN_BAD_VALUES:
-        mask = df["yyyymmdd"] == fix["date"]
+        mask = df["date"] == fix["date"]
         if mask.sum() == 0:
             print(f"WARNING: date {fix['date']} not found in data, skipping fix for {fix['column']}")
             continue
@@ -79,14 +83,14 @@ def apply_known_bad_value_fixes(df: pd.DataFrame) -> pd.DataFrame:
 def interpolate_isolated_gaps(df: pd.DataFrame, columns: list, limit: int = 3) -> pd.DataFrame:
     """
     Interpolate ONLY gaps whose full contiguous length is <= limit days.
-    Longer gaps (e.g. the ~111-day early-2013 reporting blackout affecting
+    Longer gaps (e.g. the ~87-day early-2013 reporting blackout affecting
     state, region, AND national columns) are left entirely as NaN, not
-    partially filled -- pandas built-in interpolate(limit=N) partially
+    partially filled -- pandas' built-in interpolate(limit=N) partially
     fills the first N rows of ANY gap regardless of its true length,
     which previously produced fabricated values.
     """
     df = df.copy()
-    df = df.set_index("yyyymmdd")
+    df = df.set_index("date")
     for col in columns:
         if col not in df.columns:
             continue
@@ -102,22 +106,27 @@ def interpolate_isolated_gaps(df: pd.DataFrame, columns: list, limit: int = 3) -
 
 
 def exclude_unreliable_state_period(df: pd.DataFrame, state_columns: list) -> pd.DataFrame:
-    """Rows before STATE_LEVEL_RELIABLE_FROM keep NaN for state columns (left for caller to exclude)."""
-    df = df.copy()
+    """Informational: reports how many rows fall before STATE_LEVEL_RELIABLE_FROM."""
     cutoff = pd.Timestamp(STATE_LEVEL_RELIABLE_FROM)
-    mask = df["yyyymmdd"] < cutoff
+    mask = df["date"] < cutoff
     print(f"{mask.sum()} rows before {STATE_LEVEL_RELIABLE_FROM} "
-          f"will have unreliable state-level columns left as NaN "
-          f"(region/national columns unaffected).")
+          f"are flagged unreliable (see is_data_reliable column).")
     return df
 
 
 def clean_data(df: pd.DataFrame, state_columns: list) -> pd.DataFrame:
-    """Full cleaning pipeline: fix known bad values -> interpolate short gaps -> flag long gap."""
+    """
+    Full cleaning pipeline. Rows in the unreliable early period are
+    KEPT (not dropped) with an explicit is_data_reliable flag, so
+    date continuity and region/national-level EDA remain intact while
+    training code can explicitly filter them out where needed.
+    """
     df = apply_known_bad_value_fixes(df)
     all_energymet_cols = [c for c in df.columns if "EnergyMet" in c]
     df = interpolate_isolated_gaps(df, all_energymet_cols, limit=3)
     df = exclude_unreliable_state_period(df, state_columns)
+    cutoff = pd.Timestamp(STATE_LEVEL_RELIABLE_FROM)
+    df["is_data_reliable"] = df["date"] >= cutoff
     return df
 
 
