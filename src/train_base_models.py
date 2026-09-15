@@ -86,6 +86,7 @@ def train_lightgbm_for_node(df_clean: pd.DataFrame, target_col: str,
     model.fit(X_train, y_train)
 
     preds = model.predict(X_test)
+    preds_insample = model.predict(X_train)  # needed by mint_shrink/mint_cov reconciliation
 
     # MAPE explodes toward infinity when actual values are near zero
     # (division by ~0) -- this is a known mathematical limitation, not
@@ -111,6 +112,9 @@ def train_lightgbm_for_node(df_clean: pd.DataFrame, target_col: str,
         "test_dates": test["date"].values,
         "y_test": y_test.values,
         "preds": preds,
+        "train_dates": train["date"].values,
+        "y_train": y_train.values,
+        "preds_insample": preds_insample,
         "mape": mape,
         "rmse": rmse,
         "mae": mae,
