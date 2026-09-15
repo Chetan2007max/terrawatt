@@ -33,17 +33,36 @@ def train_test_split_by_date(df: pd.DataFrame, test_start: str, date_col: str = 
 
 
 def train_lightgbm_for_node(df_clean: pd.DataFrame, target_col: str,
-                             test_start: str = "2025-01-01") -> dict:
-    """Full train+evaluate pipeline for a single hierarchy node."""
+                             test_start: str = "2025-01-01",
+                             fallback_test_days: int = 180) -> dict:
+    """
+    Full train+evaluate pipeline for a single hierarchy node.
+
+    Some nodes (e.g. DD, DNH, Essar steel) have large multi-year gaps
+    in their reporting history that happen to overlap test_start entirely
+    (confirmed: 152/152 days missing in the Oct2024-Mar2025 window for
+    these three). Rather than failing, we fall back to using each node's
+    own last `fallback_test_days` of AVAILABLE data as the test set,
+    with everything before that as train -- this keeps the pipeline
+    working per-node without assuming every series has recent data.
+    """
     df_features = build_features(df_clean, target_col=target_col)
 
     feature_cols = get_feature_columns(df_features, target_col)
     df_model = df_features.dropna(subset=[target_col] + feature_cols)
 
     train, test = train_test_split_by_date(df_model, test_start)
+    used_fallback = False
 
     if len(test) == 0:
-        raise ValueError(f"No test rows after {test_start} for {target_col} -- check date range.")
+        used_fallback = True
+        df_model = df_model.sort_values("date")
+        test = df_model.tail(fallback_test_days)
+        train = df_model.iloc[:-fallback_test_days]
+
+    if len(test) == 0 or len(train) == 0:
+        raise ValueError(f"No usable train/test data for {target_col} even with fallback -- "
+                          f"this node likely has too little valid history overall.")
 
     X_train, y_train = train[feature_cols].copy(), train[target_col]
     X_test, y_test = test[feature_cols].copy(), test[target_col]
@@ -67,12 +86,24 @@ def train_lightgbm_for_node(df_clean: pd.DataFrame, target_col: str,
 
     preds = model.predict(X_test)
 
-    mape = mean_absolute_percentage_error(y_test, preds)
+    # MAPE explodes toward infinity when actual values are near zero
+    # (division by ~0) -- this is a known mathematical limitation, not
+    # a model failure. Confirmed on Goa/RIL JAMNAGAR/Railways_ER ISTS:
+    # their MAE is small and genuinely good, but MAPE reports nonsense
+    # (e.g. billions of percent). Flag low-magnitude series so callers
+    # can report MAE instead of trusting MAPE for them.
+    mean_actual = y_test.mean()
+    is_low_magnitude = mean_actual < 5  # EnergyMet units; tune as needed
+
+    mape = mean_absolute_percentage_error(y_test, preds) if not is_low_magnitude else float("nan")
     rmse = np.sqrt(mean_squared_error(y_test, preds))
     mae = mean_absolute_error(y_test, preds)
 
     return {
         "target_col": target_col,
+        "used_fallback_split": used_fallback,
+        "is_low_magnitude": is_low_magnitude,
+        "mean_actual": mean_actual,
         "model": model,
         "train_size": len(train),
         "test_size": len(test),
