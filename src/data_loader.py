@@ -7,10 +7,16 @@ Cleaning logic incorporates every data-quality finding from the
 investigation phase (see src/hierarchy.py docstring for full details):
   - NER: EnergyMet on 2014-11-25 is a corrupted value -> set to NaN, interpolate
   - WR state-level columns on 2015-01-19 show a scaling anomaly -> set to NaN, interpolate
-  - NR state-level columns have a startup gap 2013-01-03 to 2013-03-30
-    -> flagged via STATE_LEVEL_RELIABLE_FROM, not interpolated (too long a gap
-       to interpolate reliably; excluded from state-level training instead)
-  - ~25 other isolated single/double-day gaps across all regions -> interpolated
+  - CORRECTED FINDING: the early-2013 gap (2013-01-03 to 2013-03-30, ~87
+    days) affects STATE, REGION, and NATIONAL columns simultaneously --
+    not just state-level as first assumed. This matches the source's own
+    disclosed count of ~111 missing region/national days (87 from this
+    blackout + ~24 separate later isolated gaps). Left entirely as NaN,
+    not interpolated -- a bug in an earlier version of this function
+    partially filled the first 3 rows of this gap with fabricated values
+    by bridging two points ~90 days apart; fixed by checking true
+    contiguous gap length before allowing interpolation.
+  - ~24 separate isolated single/double-day gaps elsewhere -> interpolated
 """
 
 import pandas as pd
@@ -71,12 +77,26 @@ def apply_known_bad_value_fixes(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def interpolate_isolated_gaps(df: pd.DataFrame, columns: list, limit: int = 3) -> pd.DataFrame:
-    """Interpolate short (<= limit consecutive days) gaps using linear time-based interpolation."""
+    """
+    Interpolate ONLY gaps whose full contiguous length is <= limit days.
+    Longer gaps (e.g. the ~111-day early-2013 reporting blackout affecting
+    state, region, AND national columns) are left entirely as NaN, not
+    partially filled -- pandas built-in interpolate(limit=N) partially
+    fills the first N rows of ANY gap regardless of its true length,
+    which previously produced fabricated values.
+    """
     df = df.copy()
     df = df.set_index("yyyymmdd")
     for col in columns:
-        if col in df.columns:
-            df[col] = df[col].interpolate(method="time", limit=limit, limit_area="inside")
+        if col not in df.columns:
+            continue
+        series = df[col]
+        is_na = series.isna()
+        valid_groups = (~is_na).cumsum()
+        gap_lengths = is_na.groupby(valid_groups).transform("sum")
+        fillable = is_na & (gap_lengths <= limit)
+        interpolated = series.interpolate(method="time", limit_direction="both")
+        df[col] = series.where(~fillable, interpolated)
     df = df.reset_index()
     return df
 
