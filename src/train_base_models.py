@@ -81,6 +81,7 @@ def train_lightgbm_for_node(df_clean: pd.DataFrame, target_col: str,
         max_depth=6,
         random_state=42,
         verbosity=-1,
+        n_jobs=1,  # avoid OpenMP thread conflicts causing segfaults on macOS
     )
     model.fit(X_train, y_train)
 
