@@ -100,9 +100,52 @@ REGION_MEMBERS = {
 REGIONS = ["NR", "WR", "SR", "ER", "NER"]
 
 
-def build_summing_matrix():
-    """TODO (Day 15): build the full S matrix from REGION_MEMBERS + Other node."""
-    raise NotImplementedError("Implement on Day 15 per README Section 5.3")
+def build_summing_matrix(df_clean):
+    """
+    Build the full 3-level (State/bulk-consumer + Other -> Region -> National)
+    summing matrix using hierarchicalforecast's aggregate(). Adds a synthetic
+    "Other_<Region>" node per region (region_total - sum(known members)) so
+    the library's computed region/national totals exactly match the real
+    data columns, per README Section 5.3.
+
+    Returns (Y_df, S_df, tags) as produced by hierarchicalforecast.aggregate():
+      Y_df: long-format hierarchically structured series
+      S_df: the summing matrix itself
+      tags: dict mapping each level name to its list of unique_ids
+    """
+    import pandas as pd
+    from hierarchicalforecast.utils import aggregate
+
+    long_rows = []
+    for region in REGIONS:
+        member_cols = REGION_MEMBERS[region]
+        region_col = f"{region}: EnergyMet"
+
+        for col in member_cols:
+            node_name = col.replace(": EnergyMet", "")
+            temp = df_clean[["date", col]].copy()
+            temp.columns = ["ds", "y"]
+            temp["Country"] = "India"
+            temp["Region"] = region
+            temp["State"] = node_name
+            long_rows.append(temp)
+
+        other = df_clean[region_col] - df_clean[member_cols].sum(axis=1)
+        temp_other = pd.DataFrame({
+            "ds": df_clean["date"],
+            "y": other,
+            "Country": "India",
+            "Region": region,
+            "State": f"Other_{region}"
+        })
+        long_rows.append(temp_other)
+
+    long_df = pd.concat(long_rows, ignore_index=True)
+    long_df = long_df.dropna(subset=["y"])
+
+    spec = [["Country"], ["Country", "Region"], ["Country", "Region", "State"]]
+    Y_df, S_df, tags = aggregate(df=long_df, spec=spec)
+    return Y_df, S_df, tags
 
 # WR outlier finding (2015-01-19): state-level breakdown appears
 # systematically scaled down (states sum to ~307 vs region total 909;
