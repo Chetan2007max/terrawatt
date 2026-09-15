@@ -35,13 +35,18 @@ INVESTIGATION FINDINGS (all 5 regions checked against real data):
     caused -- treat similarly to the NR/NER investigations before
     trusting WR at the same confidence level as NR/SR/ER.
 
-  NER: one confirmed corrupted data point. On 2014-11-25, NER total
-    EnergyMet = 37, but the 7 state members alone sum to ~2078 (e.g.
-    Assam alone = 1190). This is a genuine bad/corrupted value in the
-    raw source (likely a digit dropped during data entry), not a
-    hierarchy definition error. Decision: treat NER: EnergyMet as NaN
-    on 2014-11-25 and interpolate from neighboring days, rather than
-    guessing a corrected value.
+  NER: one confirmed corrupted data point, INITIALLY MISDIAGNOSED.
+    On 2014-11-25, NER total EnergyMet = 37 while the 7 state members
+    summed to ~2078, and the first pass concluded the region TOTAL was
+    corrupted. Verifying the interpolated fix against neighboring days
+    revealed the opposite: NER=37 is consistent with surrounding days
+    (35-37 range), while Assam=1190 that day is wildly inconsistent
+    with its own neighbors (~18-21 range). The actual corrupted value
+    is Assam: EnergyMet, not the region total. Corrected: Assam is
+    treated as NaN and interpolated (result: 20.95); NER total is left
+    untouched. Lesson: always validate a fix against neighboring-day
+    context for the SPECIFIC column being changed, not just whether
+    parent/child sums reconcile.
 
 TODO (Day 5+): root-cause the remaining WR max=602.1 outlier day the
 same way NER's 2014-11-25 case was diagnosed, before finalizing WR at
