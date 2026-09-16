@@ -1,5 +1,12 @@
 """
 schemas.py
 Pydantic request/response models for the TerraWatt FastAPI service.
-See README Section 5.7. TODO (Day 37).
 """
+
+from pydantic import BaseModel
+
+
+class IngestPayload(BaseModel):
+    node_id: str
+    date: str
+    actual_value: float

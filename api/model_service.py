@@ -87,3 +87,54 @@ def get_full_hierarchy_snapshot(date: str = None) -> dict:
             result["bottom_level"][uid] = value
 
     return result
+
+
+# In-memory store for ingested "live" telemetry, simulating a streaming
+# system's recent-data buffer. In a real production system this would
+# be a database/message queue; kept in-memory here for simplicity.
+# Design decision: we deliberately do NOT retrain a model on every
+# single ingested row -- that is not how real streaming forecast
+# systems work (they batch-retrain periodically on accumulated data).
+# Instead, ingested actuals are stored and can be compared against the
+# existing forecast for that date, and would feed the NEXT scheduled
+# batch retrain.
+_ingested_actuals = []
+
+
+def ingest_actual(node_id: str, date: str, actual_value: float) -> dict:
+    """
+    Record a new incoming actual value for a node/date, simulating
+    streaming telemetry. Compares against the existing forecast for
+    that date/node if one exists, to report forecast error live.
+    """
+    global _forecast_data
+    if _forecast_data is None:
+        load_forecasts()
+
+    record = {"node_id": node_id, "date": date, "actual_value": actual_value}
+    _ingested_actuals.append(record)
+
+    full_uid_candidates = _forecast_data[_forecast_data["unique_id"].str.endswith(node_id)]
+    existing = full_uid_candidates[full_uid_candidates["ds"] == date]
+
+    result = {"status": "ingested", "record": record, "total_ingested": len(_ingested_actuals)}
+    if len(existing) > 0:
+        forecasted = float(existing.iloc[0]["reconciled_forecast"])
+        error = actual_value - forecasted
+        error_pct = (error / actual_value * 100) if actual_value != 0 else None
+        result["comparison"] = {
+            "reconciled_forecast": round(forecasted, 2),
+            "actual": actual_value,
+            "error": round(error, 2),
+            "error_pct": round(error_pct, 2) if error_pct is not None else None,
+        }
+    else:
+        result["comparison"] = None
+        result["note"] = "No existing forecast found for this date/node to compare against."
+
+    return result
+
+
+def get_ingested_history() -> list:
+    """Return everything ingested so far this session."""
+    return _ingested_actuals

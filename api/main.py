@@ -6,8 +6,10 @@ See README Section 5.7 for the endpoint spec.
 
 from fastapi import FastAPI, HTTPException
 from api.model_service import (
-    load_forecasts, get_available_nodes, get_forecast_for_node, get_full_hierarchy_snapshot
+    load_forecasts, get_available_nodes, get_forecast_for_node, get_full_hierarchy_snapshot,
+    ingest_actual, get_ingested_history
 )
+from api.schemas import IngestPayload
 
 app = FastAPI(
     title="TerraWatt",
@@ -47,3 +49,20 @@ def forecast_node(node_id: str):
         return {"node_id": node_id, "forecast": get_forecast_for_node(node_id)}
     except KeyError as e:
         raise HTTPException(status_code=404, detail=str(e))
+
+
+@app.post("/ingest")
+def ingest(payload: IngestPayload):
+    """
+    Simulate streaming telemetry: ingest a new actual value for a
+    node/date, and compare it against the existing reconciled forecast
+    if one exists. Does NOT trigger live model retraining -- see
+    model_service.ingest_actual() docstring for why.
+    """
+    return ingest_actual(payload.node_id, payload.date, payload.actual_value)
+
+
+@app.get("/ingest/history")
+def ingest_history():
+    """Return everything ingested so far this session."""
+    return {"history": get_ingested_history()}
