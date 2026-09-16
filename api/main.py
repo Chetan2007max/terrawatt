@@ -5,6 +5,7 @@ See README Section 5.7 for the endpoint spec.
 """
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from api.model_service import (
     load_forecasts, get_available_nodes, get_forecast_for_node, get_full_hierarchy_snapshot,
     ingest_actual, get_ingested_history
@@ -14,6 +15,13 @@ from api.schemas import IngestPayload
 app = FastAPI(
     title="TerraWatt",
     description="Multi-Region Energy Demand Forecasting & Reconciliation Engine"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
