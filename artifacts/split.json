@@ -1,0 +1,37 @@
+{
+  "dataset_name": "GRID-INDIA (POSOCO) Daily Energy Data",
+  "reliable_period_start": "2013-03-31",
+  "reliable_period_end": "2026-09-12",
+  "total_reliable_rows": 4914,
+  "split_ratios": {
+    "train_fraction_of_total": 0.72,
+    "val_fraction_of_total": 0.08,
+    "train_full_fraction_of_total": 0.8,
+    "test_fraction_of_total": 0.2,
+    "val_fraction_of_train_full": 0.1
+  },
+  "train": {
+    "start_date": "2013-03-31",
+    "end_date": "2022-12-06",
+    "n_rows": 3538
+  },
+  "val": {
+    "start_date": "2022-12-07",
+    "end_date": "2024-01-03",
+    "n_rows": 393
+  },
+  "train_full": {
+    "start_date": "2013-03-31",
+    "end_date": "2024-01-03",
+    "n_rows": 3931
+  },
+  "test": {
+    "start_date": "2024-01-04",
+    "end_date": "2026-09-12",
+    "n_rows": 983
+  },
+  "cutoffs": {
+    "val_start_date": "2022-12-07",
+    "test_start_date": "2024-01-04"
+  }
+}

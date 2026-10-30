@@ -114,6 +114,19 @@ def exclude_unreliable_state_period(df: pd.DataFrame, state_columns: list) -> pd
     return df
 
 
+def clip_physically_non_negative_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Solar generation, energy shortages, and peak shortages cannot be
+    physically negative. Clip isolated negative reporting anomalies / noise to 0.0.
+    """
+    df = df.copy()
+    non_neg_patterns = ["SolarGen", "EnergyShortage", "PeakShortage"]
+    for col in df.columns:
+        if any(pat in col for pat in non_neg_patterns):
+            df[col] = df[col].clip(lower=0.0)
+    return df
+
+
 def clean_data(df: pd.DataFrame, state_columns: list) -> pd.DataFrame:
     """
     Full cleaning pipeline. Rows in the unreliable early period are
@@ -124,6 +137,7 @@ def clean_data(df: pd.DataFrame, state_columns: list) -> pd.DataFrame:
     df = apply_known_bad_value_fixes(df)
     all_energymet_cols = [c for c in df.columns if "EnergyMet" in c]
     df = interpolate_isolated_gaps(df, all_energymet_cols, limit=3)
+    df = clip_physically_non_negative_columns(df)
     df = exclude_unreliable_state_period(df, state_columns)
     cutoff = pd.Timestamp(STATE_LEVEL_RELIABLE_FROM)
     df["is_data_reliable"] = df["date"] >= cutoff
