@@ -1,0 +1,771 @@
+{
+  "caveat": "Ignores transmission limits, plant outages, inter-regional transfer limits, and intraday peaks, because the data is daily.",
+  "is_heuristic": true,
+  "recent_period_start": "2018-01-01",
+  "recent_period_end": "2026-09-12",
+  "shortage_materiality_threshold_mu": 1.0,
+  "regions": {
+    "NR": {
+      "all_time_max_mu": 2095.0,
+      "all_time_min_mu": 566.0,
+      "monthly_stats": {
+        "1": {
+          "p05": 772.1,
+          "p50": 952.0,
+          "p95": 1308.4,
+          "p99": 1377.0,
+          "max": 1399.0
+        },
+        "2": {
+          "p05": 766.3,
+          "p50": 961.0,
+          "p95": 1253.7,
+          "p99": 1274.02,
+          "max": 1280.0
+        },
+        "3": {
+          "p05": 677.3,
+          "p50": 918.0,
+          "p95": 1230.85,
+          "p99": 1308.73,
+          "max": 1343.0
+        },
+        "4": {
+          "p05": 682.9,
+          "p50": 963.0,
+          "p95": 1381.0,
+          "p99": 1575.49,
+          "max": 1649.0
+        },
+        "5": {
+          "p05": 818.3,
+          "p50": 1102.0,
+          "p95": 1768.95,
+          "p99": 1887.0,
+          "max": 1926.0
+        },
+        "6": {
+          "p05": 891.0,
+          "p50": 1286.0,
+          "p95": 1904.25,
+          "p99": 2019.01,
+          "max": 2090.0
+        },
+        "7": {
+          "p05": 928.0,
+          "p50": 1277.0,
+          "p95": 1882.7,
+          "p99": 2018.06,
+          "max": 2095.0
+        },
+        "8": {
+          "p05": 906.25,
+          "p50": 1275.5,
+          "p95": 1796.15,
+          "p99": 1893.69,
+          "max": 1942.0
+        },
+        "9": {
+          "p05": 868.0,
+          "p50": 1206.0,
+          "p95": 1755.75,
+          "p99": 1818.96,
+          "max": 1843.0
+        },
+        "10": {
+          "p05": 748.1,
+          "p50": 1008.0,
+          "p95": 1400.8,
+          "p99": 1581.32,
+          "max": 1670.0
+        },
+        "11": {
+          "p05": 720.9,
+          "p50": 877.5,
+          "p95": 1168.55,
+          "p99": 1237.11,
+          "max": 1252.0
+        },
+        "12": {
+          "p05": 758.2,
+          "p50": 938.0,
+          "p95": 1267.9,
+          "p99": 1310.96,
+          "max": 1330.0
+        }
+      },
+      "capability_proxy_365d_max_gen_mu": 1730.33,
+      "p95_import_gap_mu": 386.3,
+      "supply_limit_mu": 2116.63,
+      "shortage_tiers": [
+        {
+          "tier_fraction": 0.8,
+          "cutoff_mu": 1676.0,
+          "sample_size_days": 285,
+          "shortage_days": 163,
+          "frequency_pct": 57.2,
+          "is_sufficient_sample": true
+        },
+        {
+          "tier_fraction": 0.85,
+          "cutoff_mu": 1780.75,
+          "sample_size_days": 154,
+          "shortage_days": 108,
+          "frequency_pct": 70.1,
+          "is_sufficient_sample": true
+        },
+        {
+          "tier_fraction": 0.9,
+          "cutoff_mu": 1885.5,
+          "sample_size_days": 59,
+          "shortage_days": 43,
+          "frequency_pct": 72.9,
+          "is_sufficient_sample": true
+        },
+        {
+          "tier_fraction": 0.95,
+          "cutoff_mu": 1990.25,
+          "sample_size_days": 15,
+          "shortage_days": 14,
+          "frequency_pct": 93.3,
+          "is_sufficient_sample": false
+        }
+      ]
+    },
+    "WR": {
+      "all_time_max_mu": 1789.5,
+      "all_time_min_mu": 668.0,
+      "monthly_stats": {
+        "1": {
+          "p05": 843.3,
+          "p50": 1122.0,
+          "p95": 1572.16,
+          "p99": 1600.39,
+          "max": 1619.7
+        },
+        "2": {
+          "p05": 885.2,
+          "p50": 1198.0,
+          "p95": 1643.4,
+          "p99": 1665.71,
+          "max": 1676.8
+        },
+        "3": {
+          "p05": 818.3,
+          "p50": 1161.0,
+          "p95": 1643.8,
+          "p99": 1689.15,
+          "max": 1703.1
+        },
+        "4": {
+          "p05": 863.9,
+          "p50": 1170.5,
+          "p95": 1716.83,
+          "p99": 1746.45,
+          "max": 1766.7
+        },
+        "5": {
+          "p05": 875.65,
+          "p50": 1177.0,
+          "p95": 1681.25,
+          "p99": 1782.68,
+          "max": 1789.5
+        },
+        "6": {
+          "p05": 748.75,
+          "p50": 1102.0,
+          "p95": 1656.06,
+          "p99": 1741.59,
+          "max": 1752.0
+        },
+        "7": {
+          "p05": 722.95,
+          "p50": 1029.0,
+          "p95": 1467.31,
+          "p99": 1642.22,
+          "max": 1678.0
+        },
+        "8": {
+          "p05": 733.2,
+          "p50": 1020.5,
+          "p95": 1533.9,
+          "p99": 1597.34,
+          "max": 1615.9
+        },
+        "9": {
+          "p05": 794.05,
+          "p50": 1065.5,
+          "p95": 1496.69,
+          "p99": 1637.77,
+          "max": 1690.5
+        },
+        "10": {
+          "p05": 810.0,
+          "p50": 1132.0,
+          "p95": 1494.1,
+          "p99": 1531.84,
+          "max": 1551.5
+        },
+        "11": {
+          "p05": 876.45,
+          "p50": 1145.5,
+          "p95": 1491.92,
+          "p99": 1531.06,
+          "max": 1535.3
+        },
+        "12": {
+          "p05": 887.1,
+          "p50": 1132.0,
+          "p95": 1525.3,
+          "p99": 1569.93,
+          "max": 1585.7
+        }
+      },
+      "capability_proxy_365d_max_gen_mu": 2151.79,
+      "p95_import_gap_mu": -63.23,
+      "supply_limit_mu": 2088.56,
+      "shortage_tiers": [
+        {
+          "tier_fraction": 0.8,
+          "cutoff_mu": 1431.6,
+          "sample_size_days": 928,
+          "shortage_days": 192,
+          "frequency_pct": 20.7,
+          "is_sufficient_sample": true
+        },
+        {
+          "tier_fraction": 0.85,
+          "cutoff_mu": 1521.08,
+          "sample_size_days": 468,
+          "shortage_days": 87,
+          "frequency_pct": 18.6,
+          "is_sufficient_sample": true
+        },
+        {
+          "tier_fraction": 0.9,
+          "cutoff_mu": 1610.55,
+          "sample_size_days": 221,
+          "shortage_days": 58,
+          "frequency_pct": 26.2,
+          "is_sufficient_sample": true
+        },
+        {
+          "tier_fraction": 0.95,
+          "cutoff_mu": 1700.02,
+          "sample_size_days": 64,
+          "shortage_days": 27,
+          "frequency_pct": 42.2,
+          "is_sufficient_sample": true
+        }
+      ]
+    },
+    "SR": {
+      "all_time_max_mu": 1532.89,
+      "all_time_min_mu": 595.0,
+      "monthly_stats": {
+        "1": {
+          "p05": 740.1,
+          "p50": 924.0,
+          "p95": 1209.65,
+          "p99": 1264.48,
+          "max": 1280.05
+        },
+        "2": {
+          "p05": 778.3,
+          "p50": 1037.0,
+          "p95": 1350.82,
+          "p99": 1384.04,
+          "max": 1408.76
+        },
+        "3": {
+          "p05": 792.15,
+          "p50": 1114.0,
+          "p95": 1442.46,
+          "p99": 1485.74,
+          "max": 1513.26
+        },
+        "4": {
+          "p05": 714.8,
+          "p50": 1008.0,
+          "p95": 1445.12,
+          "p99": 1511.75,
+          "max": 1532.89
+        },
+        "5": {
+          "p05": 698.65,
+          "p50": 917.5,
+          "p95": 1298.74,
+          "p99": 1374.13,
+          "max": 1399.63
+        },
+        "6": {
+          "p05": 674.0,
+          "p50": 897.5,
+          "p95": 1274.33,
+          "p99": 1324.54,
+          "max": 1352.65
+        },
+        "7": {
+          "p05": 680.6,
+          "p50": 881.5,
+          "p95": 1342.71,
+          "p99": 1429.97,
+          "max": 1496.17
+        },
+        "8": {
+          "p05": 704.25,
+          "p50": 911.5,
+          "p95": 1324.9,
+          "p99": 1410.23,
+          "max": 1438.96
+        },
+        "9": {
+          "p05": 705.0,
+          "p50": 898.0,
+          "p95": 1242.2,
+          "p99": 1463.15,
+          "max": 1481.31
+        },
+        "10": {
+          "p05": 674.4,
+          "p50": 874.0,
+          "p95": 1203.41,
+          "p99": 1233.5,
+          "max": 1248.9
+        },
+        "11": {
+          "p05": 663.9,
+          "p50": 865.5,
+          "p95": 1097.92,
+          "p99": 1130.71,
+          "max": 1153.5
+        },
+        "12": {
+          "p05": 692.0,
+          "p50": 886.0,
+          "p95": 1138.21,
+          "p99": 1188.83,
+          "max": 1244.76
+        }
+      },
+      "capability_proxy_365d_max_gen_mu": 1406.93,
+      "p95_import_gap_mu": 261.18,
+      "supply_limit_mu": 1668.11,
+      "shortage_tiers": [
+        {
+          "tier_fraction": 0.8,
+          "cutoff_mu": 1226.31,
+          "sample_size_days": 525,
+          "shortage_days": 42,
+          "frequency_pct": 8.0,
+          "is_sufficient_sample": true
+        },
+        {
+          "tier_fraction": 0.85,
+          "cutoff_mu": 1302.96,
+          "sample_size_days": 303,
+          "shortage_days": 23,
+          "frequency_pct": 7.6,
+          "is_sufficient_sample": true
+        },
+        {
+          "tier_fraction": 0.9,
+          "cutoff_mu": 1379.6,
+          "sample_size_days": 132,
+          "shortage_days": 19,
+          "frequency_pct": 14.4,
+          "is_sufficient_sample": true
+        },
+        {
+          "tier_fraction": 0.95,
+          "cutoff_mu": 1456.25,
+          "sample_size_days": 44,
+          "shortage_days": 12,
+          "frequency_pct": 27.3,
+          "is_sufficient_sample": true
+        }
+      ]
+    },
+    "ER": {
+      "all_time_max_mu": 750.69,
+      "all_time_min_mu": 173.0,
+      "monthly_stats": {
+        "1": {
+          "p05": 295.0,
+          "p50": 359.0,
+          "p95": 485.79,
+          "p99": 503.61,
+          "max": 510.18
+        },
+        "2": {
+          "p05": 297.0,
+          "p50": 369.0,
+          "p95": 503.8,
+          "p99": 515.82,
+          "max": 518.87
+        },
+        "3": {
+          "p05": 310.15,
+          "p50": 405.0,
+          "p95": 563.78,
+          "p99": 595.28,
+          "max": 599.8
+        },
+        "4": {
+          "p05": 301.95,
+          "p50": 417.5,
+          "p95": 650.99,
+          "p99": 690.37,
+          "max": 722.53
+        },
+        "5": {
+          "p05": 307.65,
+          "p50": 424.5,
+          "p95": 656.98,
+          "p99": 724.72,
+          "max": 750.69
+        },
+        "6": {
+          "p05": 313.9,
+          "p50": 446.0,
+          "p95": 684.92,
+          "p99": 722.75,
+          "max": 736.98
+        },
+        "7": {
+          "p05": 318.3,
+          "p50": 445.0,
+          "p95": 665.56,
+          "p99": 693.77,
+          "max": 703.71
+        },
+        "8": {
+          "p05": 314.0,
+          "p50": 460.5,
+          "p95": 667.67,
+          "p99": 699.46,
+          "max": 734.74
+        },
+        "9": {
+          "p05": 317.0,
+          "p50": 452.5,
+          "p95": 643.27,
+          "p99": 666.68,
+          "max": 670.75
+        },
+        "10": {
+          "p05": 300.1,
+          "p50": 413.0,
+          "p95": 572.62,
+          "p99": 591.44,
+          "max": 624.82
+        },
+        "11": {
+          "p05": 284.45,
+          "p50": 353.0,
+          "p95": 473.87,
+          "p99": 495.27,
+          "max": 526.11
+        },
+        "12": {
+          "p05": 283.1,
+          "p50": 343.0,
+          "p95": 453.95,
+          "p99": 482.3,
+          "max": 488.13
+        }
+      },
+      "capability_proxy_365d_max_gen_mu": 824.61,
+      "p95_import_gap_mu": -41.48,
+      "supply_limit_mu": 783.13,
+      "shortage_tiers": [
+        {
+          "tier_fraction": 0.8,
+          "cutoff_mu": 600.55,
+          "sample_size_days": 425,
+          "shortage_days": 123,
+          "frequency_pct": 28.9,
+          "is_sufficient_sample": true
+        },
+        {
+          "tier_fraction": 0.85,
+          "cutoff_mu": 638.09,
+          "sample_size_days": 220,
+          "shortage_days": 53,
+          "frequency_pct": 24.1,
+          "is_sufficient_sample": true
+        },
+        {
+          "tier_fraction": 0.9,
+          "cutoff_mu": 675.62,
+          "sample_size_days": 84,
+          "shortage_days": 16,
+          "frequency_pct": 19.0,
+          "is_sufficient_sample": true
+        },
+        {
+          "tier_fraction": 0.95,
+          "cutoff_mu": 713.16,
+          "sample_size_days": 16,
+          "shortage_days": 3,
+          "frequency_pct": 18.8,
+          "is_sufficient_sample": false
+        }
+      ]
+    },
+    "NER": {
+      "all_time_max_mu": 82.72,
+      "all_time_min_mu": 22.0,
+      "monthly_stats": {
+        "1": {
+          "p05": 33.0,
+          "p50": 42.0,
+          "p95": 51.55,
+          "p99": 52.92,
+          "max": 53.66
+        },
+        "2": {
+          "p05": 32.0,
+          "p50": 42.0,
+          "p95": 51.96,
+          "p99": 53.07,
+          "max": 54.14
+        },
+        "3": {
+          "p05": 32.0,
+          "p50": 42.0,
+          "p95": 52.62,
+          "p99": 56.83,
+          "max": 58.73
+        },
+        "4": {
+          "p05": 27.95,
+          "p50": 40.0,
+          "p95": 57.03,
+          "p99": 59.73,
+          "max": 65.78
+        },
+        "5": {
+          "p05": 29.65,
+          "p50": 43.0,
+          "p95": 64.07,
+          "p99": 70.7,
+          "max": 71.58
+        },
+        "6": {
+          "p05": 34.0,
+          "p50": 49.0,
+          "p95": 71.93,
+          "p99": 74.9,
+          "max": 80.06
+        },
+        "7": {
+          "p05": 35.0,
+          "p50": 51.0,
+          "p95": 75.48,
+          "p99": 78.88,
+          "max": 82.3
+        },
+        "8": {
+          "p05": 36.0,
+          "p50": 54.0,
+          "p95": 75.38,
+          "p99": 80.8,
+          "max": 82.72
+        },
+        "9": {
+          "p05": 35.52,
+          "p50": 51.0,
+          "p95": 74.36,
+          "p99": 78.77,
+          "max": 81.16
+        },
+        "10": {
+          "p05": 34.0,
+          "p50": 47.0,
+          "p95": 62.99,
+          "p99": 67.64,
+          "max": 70.7
+        },
+        "11": {
+          "p05": 32.0,
+          "p50": 42.0,
+          "p95": 52.56,
+          "p99": 54.62,
+          "max": 55.94
+        },
+        "12": {
+          "p05": 32.0,
+          "p50": 42.0,
+          "p95": 50.77,
+          "p99": 52.04,
+          "max": 54.74
+        }
+      },
+      "capability_proxy_365d_max_gen_mu": 99.68,
+      "p95_import_gap_mu": 10.26,
+      "supply_limit_mu": 109.94,
+      "shortage_tiers": [
+        {
+          "tier_fraction": 0.8,
+          "cutoff_mu": 66.18,
+          "sample_size_days": 322,
+          "shortage_days": 23,
+          "frequency_pct": 7.1,
+          "is_sufficient_sample": true
+        },
+        {
+          "tier_fraction": 0.85,
+          "cutoff_mu": 70.31,
+          "sample_size_days": 192,
+          "shortage_days": 5,
+          "frequency_pct": 2.6,
+          "is_sufficient_sample": true
+        },
+        {
+          "tier_fraction": 0.9,
+          "cutoff_mu": 74.45,
+          "sample_size_days": 79,
+          "shortage_days": 1,
+          "frequency_pct": 1.3,
+          "is_sufficient_sample": true
+        },
+        {
+          "tier_fraction": 0.95,
+          "cutoff_mu": 78.58,
+          "sample_size_days": 23,
+          "shortage_days": 0,
+          "frequency_pct": 0.0,
+          "is_sufficient_sample": false
+        }
+      ]
+    },
+    "India": {
+      "all_time_max_mu": 6002.3,
+      "all_time_min_mu": 2251.0,
+      "monthly_stats": {
+        "1": {
+          "p05": 2701.6,
+          "p50": 3407.0,
+          "p95": 4614.96,
+          "p99": 4711.32,
+          "max": 4765.57
+        },
+        "2": {
+          "p05": 2758.9,
+          "p50": 3617.0,
+          "p95": 4770.53,
+          "p99": 4844.05,
+          "max": 4902.99
+        },
+        "3": {
+          "p05": 2640.75,
+          "p50": 3591.0,
+          "p95": 4887.74,
+          "p99": 5092.74,
+          "max": 5152.39
+        },
+        "4": {
+          "p05": 2641.75,
+          "p50": 3589.5,
+          "p95": 5110.69,
+          "p99": 5453.82,
+          "max": 5619.92
+        },
+        "5": {
+          "p05": 2796.65,
+          "p50": 3641.5,
+          "p95": 5262.39,
+          "p99": 5751.55,
+          "max": 5830.35
+        },
+        "6": {
+          "p05": 2679.6,
+          "p50": 3749.5,
+          "p95": 5472.37,
+          "p99": 5733.97,
+          "max": 5806.19
+        },
+        "7": {
+          "p05": 2694.5,
+          "p50": 3735.0,
+          "p95": 5352.39,
+          "p99": 5854.85,
+          "max": 6002.3
+        },
+        "8": {
+          "p05": 2682.95,
+          "p50": 3683.5,
+          "p95": 5382.34,
+          "p99": 5601.82,
+          "max": 5750.29
+        },
+        "9": {
+          "p05": 2747.05,
+          "p50": 3727.5,
+          "p95": 5056.43,
+          "p99": 5618.83,
+          "max": 5739.67
+        },
+        "10": {
+          "p05": 2590.4,
+          "p50": 3476.0,
+          "p95": 4579.81,
+          "p99": 4884.67,
+          "max": 4967.16
+        },
+        "11": {
+          "p05": 2594.45,
+          "p50": 3262.0,
+          "p95": 4217.12,
+          "p99": 4355.88,
+          "max": 4386.57
+        },
+        "12": {
+          "p05": 2677.4,
+          "p50": 3349.0,
+          "p95": 4422.36,
+          "p99": 4602.11,
+          "max": 4680.53
+        }
+      },
+      "capability_proxy_365d_max_gen_mu": 6002.3,
+      "p95_import_gap_mu": 0.0,
+      "supply_limit_mu": 6002.3,
+      "shortage_tiers": [
+        {
+          "tier_fraction": 0.8,
+          "cutoff_mu": 4801.84,
+          "sample_size_days": 497,
+          "shortage_days": 296,
+          "frequency_pct": 59.6,
+          "is_sufficient_sample": true
+        },
+        {
+          "tier_fraction": 0.85,
+          "cutoff_mu": 5101.95,
+          "sample_size_days": 194,
+          "shortage_days": 141,
+          "frequency_pct": 72.7,
+          "is_sufficient_sample": true
+        },
+        {
+          "tier_fraction": 0.9,
+          "cutoff_mu": 5402.07,
+          "sample_size_days": 104,
+          "shortage_days": 82,
+          "frequency_pct": 78.8,
+          "is_sufficient_sample": true
+        },
+        {
+          "tier_fraction": 0.95,
+          "cutoff_mu": 5702.18,
+          "sample_size_days": 23,
+          "shortage_days": 22,
+          "frequency_pct": 95.7,
+          "is_sufficient_sample": false
+        }
+      ]
+    }
+  }
+}
