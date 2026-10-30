@@ -1,0 +1,538 @@
+{
+  "unreconciled": {
+    "baseline_name": "unreconciled",
+    "horizon": 1,
+    "test_days_count": 983,
+    "test_period_start": "2024-01-04",
+    "test_period_end": "2026-09-12",
+    "mean_daily_baseline_mismatch_mu": 174.95,
+    "mean_daily_reconciled_mismatch_mu": 156.03,
+    "mean_daily_avoided_mismatch_mu": 18.92,
+    "annualized_avoided_mismatch_mu": 6911.5,
+    "pct_lower_than_baseline": 10.82,
+    "bootstrap_ci_95": {
+      "ci_lower_mu_year": 5507.3,
+      "ci_upper_mu_year": 8209.4,
+      "confidence_level_pct": 95.0,
+      "block_size_days": 7,
+      "n_bootstraps": 1000
+    },
+    "regional_breakdown": {
+      "NR": {
+        "baseline_mismatch_mu_day": 70.79,
+        "reconciled_mismatch_mu_day": 60.93,
+        "avoided_mismatch_mu_year": 3604.1,
+        "pct_lower": 13.94
+      },
+      "WR": {
+        "baseline_mismatch_mu_day": 40.94,
+        "reconciled_mismatch_mu_day": 36.07,
+        "avoided_mismatch_mu_year": 1778.8,
+        "pct_lower": 11.9
+      },
+      "SR": {
+        "baseline_mismatch_mu_day": 39.17,
+        "reconciled_mismatch_mu_day": 35.87,
+        "avoided_mismatch_mu_year": 1207.3,
+        "pct_lower": 8.44
+      },
+      "ER": {
+        "baseline_mismatch_mu_day": 20.88,
+        "reconciled_mismatch_mu_day": 20.1,
+        "avoided_mismatch_mu_year": 285.0,
+        "pct_lower": 3.74
+      },
+      "NER": {
+        "baseline_mismatch_mu_day": 3.16,
+        "reconciled_mismatch_mu_day": 3.06,
+        "avoided_mismatch_mu_year": 36.3,
+        "pct_lower": 3.14
+      }
+    },
+    "valuation": {
+      "user_case": {
+        "price_under_per_kwh": 6.5,
+        "price_over_per_kwh": 3.5,
+        "value_rupees": 30784758445.85,
+        "value_crores": 3078.48
+      },
+      "low_case": {
+        "price_under_per_kwh": 4.5,
+        "price_over_per_kwh": 2.5,
+        "value_rupees": 21675081806.31,
+        "value_crores": 2167.51,
+        "citation": {
+          "price_under_per_kwh": 4.5,
+          "price_over_per_kwh": 2.5,
+          "blended_average_per_kwh": 3.5,
+          "source": "Baseload thermal energy charge / off-peak bilateral trade rate",
+          "date": "2024-01-01",
+          "citation": "CERC Multi-Year Tariff Regulations 2024-29 Energy Charge Rate benchmarks"
+        }
+      },
+      "base_case": {
+        "price_under_per_kwh": 6.5,
+        "price_over_per_kwh": 3.5,
+        "value_rupees": 30784758445.85,
+        "value_crores": 3078.48,
+        "citation": {
+          "price_under_per_kwh": 6.5,
+          "price_over_per_kwh": 3.5,
+          "blended_average_per_kwh": 5.0,
+          "source": "IEX Day-Ahead Market (DAM) average peak clearing price and CERC Deviation Settlement Mechanism (DSM) Regulations 2022/2024",
+          "date": "2024-03-31",
+          "citation": "CERC Report on Market Monitoring of Power Exchanges in India (FY 2023-24) and DSM Order dated March 2024"
+        }
+      },
+      "high_case": {
+        "price_under_per_kwh": 9.5,
+        "price_over_per_kwh": 4.5,
+        "value_rupees": 42092654670.43,
+        "value_crores": 4209.27,
+        "citation": {
+          "price_under_per_kwh": 9.5,
+          "price_over_per_kwh": 4.5,
+          "blended_average_per_kwh": 7.0,
+          "source": "CERC High-Price Day Ahead Market (HP-DAM) ceiling order and summer peak emergency procurement rate",
+          "date": "2024-03-26",
+          "citation": "CERC Order in Petition No. 04/SM/2024 capping HP-DAM at \u20b910.00/kWh during summer peak months"
+        }
+      }
+    },
+    "planning_inconsistency": {
+      "mean_daily_gap_mu": 91.03,
+      "annualized_gap_mu": 33249.8,
+      "note": "Average daily MU discrepancy between the sum of unreconciled regional forecasts and the national forecast. Reported separately; not added to avoided physical mismatch."
+    },
+    "headline_text": "Avoided forecast mismatch: 6,911.5 MU per year (10.82 percent lower than baseline), worth about \u20b93,078.48 Crores (30,784,758,446 rupees) at the prices shown.",
+    "note": "This estimates avoided over- or under-procurement relative to the stated baseline; it is not electricity physically saved and not evidence of what a government would save.",
+    "citable_price_sources": {
+      "base_case": {
+        "price_under_per_kwh": 6.5,
+        "price_over_per_kwh": 3.5,
+        "blended_average_per_kwh": 5.0,
+        "source": "IEX Day-Ahead Market (DAM) average peak clearing price and CERC Deviation Settlement Mechanism (DSM) Regulations 2022/2024",
+        "date": "2024-03-31",
+        "citation": "CERC Report on Market Monitoring of Power Exchanges in India (FY 2023-24) and DSM Order dated March 2024"
+      },
+      "low_case": {
+        "price_under_per_kwh": 4.5,
+        "price_over_per_kwh": 2.5,
+        "blended_average_per_kwh": 3.5,
+        "source": "Baseload thermal energy charge / off-peak bilateral trade rate",
+        "date": "2024-01-01",
+        "citation": "CERC Multi-Year Tariff Regulations 2024-29 Energy Charge Rate benchmarks"
+      },
+      "high_case": {
+        "price_under_per_kwh": 9.5,
+        "price_over_per_kwh": 4.5,
+        "blended_average_per_kwh": 7.0,
+        "source": "CERC High-Price Day Ahead Market (HP-DAM) ceiling order and summer peak emergency procurement rate",
+        "date": "2024-03-26",
+        "citation": "CERC Order in Petition No. 04/SM/2024 capping HP-DAM at \u20b910.00/kWh during summer peak months"
+      }
+    }
+  },
+  "seasonal_naive_7d": {
+    "baseline_name": "seasonal_naive_7d",
+    "horizon": 1,
+    "test_days_count": 983,
+    "test_period_start": "2024-01-04",
+    "test_period_end": "2026-09-12",
+    "mean_daily_baseline_mismatch_mu": 272.8,
+    "mean_daily_reconciled_mismatch_mu": 156.03,
+    "mean_daily_avoided_mismatch_mu": 116.77,
+    "annualized_avoided_mismatch_mu": 42650.5,
+    "pct_lower_than_baseline": 42.8,
+    "bootstrap_ci_95": {
+      "ci_lower_mu_year": 36016.6,
+      "ci_upper_mu_year": 49079.5,
+      "confidence_level_pct": 95.0,
+      "block_size_days": 7,
+      "n_bootstraps": 1000
+    },
+    "regional_breakdown": {
+      "NR": {
+        "baseline_mismatch_mu_day": 106.46,
+        "reconciled_mismatch_mu_day": 60.93,
+        "avoided_mismatch_mu_year": 16631.3,
+        "pct_lower": 42.77
+      },
+      "WR": {
+        "baseline_mismatch_mu_day": 63.47,
+        "reconciled_mismatch_mu_day": 36.07,
+        "avoided_mismatch_mu_year": 10005.4,
+        "pct_lower": 43.16
+      },
+      "SR": {
+        "baseline_mismatch_mu_day": 61.57,
+        "reconciled_mismatch_mu_day": 35.87,
+        "avoided_mismatch_mu_year": 9386.6,
+        "pct_lower": 41.74
+      },
+      "ER": {
+        "baseline_mismatch_mu_day": 37.12,
+        "reconciled_mismatch_mu_day": 20.1,
+        "avoided_mismatch_mu_year": 6219.0,
+        "pct_lower": 45.86
+      },
+      "NER": {
+        "baseline_mismatch_mu_day": 4.18,
+        "reconciled_mismatch_mu_day": 3.06,
+        "avoided_mismatch_mu_year": 408.0,
+        "pct_lower": 26.73
+      }
+    },
+    "valuation": {
+      "user_case": {
+        "price_under_per_kwh": 6.5,
+        "price_over_per_kwh": 3.5,
+        "value_rupees": 228930105954.44,
+        "value_crores": 22893.01
+      },
+      "low_case": {
+        "price_under_per_kwh": 4.5,
+        "price_over_per_kwh": 2.5,
+        "value_rupees": 159728485434.52,
+        "value_crores": 15972.85,
+        "citation": {
+          "price_under_per_kwh": 4.5,
+          "price_over_per_kwh": 2.5,
+          "blended_average_per_kwh": 3.5,
+          "source": "Baseload thermal energy charge / off-peak bilateral trade rate",
+          "date": "2024-01-01",
+          "citation": "CERC Multi-Year Tariff Regulations 2024-29 Energy Charge Rate benchmarks"
+        }
+      },
+      "base_case": {
+        "price_under_per_kwh": 6.5,
+        "price_over_per_kwh": 3.5,
+        "value_rupees": 228930105954.44,
+        "value_crores": 22893.01,
+        "citation": {
+          "price_under_per_kwh": 6.5,
+          "price_over_per_kwh": 3.5,
+          "blended_average_per_kwh": 5.0,
+          "source": "IEX Day-Ahead Market (DAM) average peak clearing price and CERC Deviation Settlement Mechanism (DSM) Regulations 2022/2024",
+          "date": "2024-03-31",
+          "citation": "CERC Report on Market Monitoring of Power Exchanges in India (FY 2023-24) and DSM Order dated March 2024"
+        }
+      },
+      "high_case": {
+        "price_under_per_kwh": 9.5,
+        "price_over_per_kwh": 4.5,
+        "value_rupees": 324682858204.9,
+        "value_crores": 32468.29,
+        "citation": {
+          "price_under_per_kwh": 9.5,
+          "price_over_per_kwh": 4.5,
+          "blended_average_per_kwh": 7.0,
+          "source": "CERC High-Price Day Ahead Market (HP-DAM) ceiling order and summer peak emergency procurement rate",
+          "date": "2024-03-26",
+          "citation": "CERC Order in Petition No. 04/SM/2024 capping HP-DAM at \u20b910.00/kWh during summer peak months"
+        }
+      }
+    },
+    "planning_inconsistency": {
+      "mean_daily_gap_mu": 148.19,
+      "annualized_gap_mu": 54127.6,
+      "note": "Average daily MU discrepancy between the sum of unreconciled regional forecasts and the national forecast. Reported separately; not added to avoided physical mismatch."
+    },
+    "headline_text": "Avoided forecast mismatch: 42,650.5 MU per year (42.80 percent lower than baseline), worth about \u20b922,893.01 Crores (228,930,105,954 rupees) at the prices shown.",
+    "note": "This estimates avoided over- or under-procurement relative to the stated baseline; it is not electricity physically saved and not evidence of what a government would save.",
+    "citable_price_sources": {
+      "base_case": {
+        "price_under_per_kwh": 6.5,
+        "price_over_per_kwh": 3.5,
+        "blended_average_per_kwh": 5.0,
+        "source": "IEX Day-Ahead Market (DAM) average peak clearing price and CERC Deviation Settlement Mechanism (DSM) Regulations 2022/2024",
+        "date": "2024-03-31",
+        "citation": "CERC Report on Market Monitoring of Power Exchanges in India (FY 2023-24) and DSM Order dated March 2024"
+      },
+      "low_case": {
+        "price_under_per_kwh": 4.5,
+        "price_over_per_kwh": 2.5,
+        "blended_average_per_kwh": 3.5,
+        "source": "Baseload thermal energy charge / off-peak bilateral trade rate",
+        "date": "2024-01-01",
+        "citation": "CERC Multi-Year Tariff Regulations 2024-29 Energy Charge Rate benchmarks"
+      },
+      "high_case": {
+        "price_under_per_kwh": 9.5,
+        "price_over_per_kwh": 4.5,
+        "blended_average_per_kwh": 7.0,
+        "source": "CERC High-Price Day Ahead Market (HP-DAM) ceiling order and summer peak emergency procurement rate",
+        "date": "2024-03-26",
+        "citation": "CERC Order in Petition No. 04/SM/2024 capping HP-DAM at \u20b910.00/kWh during summer peak months"
+      }
+    }
+  },
+  "seasonal_naive_364d": {
+    "baseline_name": "seasonal_naive_364d",
+    "horizon": 1,
+    "test_days_count": 983,
+    "test_period_start": "2024-01-04",
+    "test_period_end": "2026-09-12",
+    "mean_daily_baseline_mismatch_mu": 397.23,
+    "mean_daily_reconciled_mismatch_mu": 156.03,
+    "mean_daily_avoided_mismatch_mu": 241.2,
+    "annualized_avoided_mismatch_mu": 88098.5,
+    "pct_lower_than_baseline": 60.72,
+    "bootstrap_ci_95": {
+      "ci_lower_mu_year": 76625.6,
+      "ci_upper_mu_year": 100773.1,
+      "confidence_level_pct": 95.0,
+      "block_size_days": 7,
+      "n_bootstraps": 1000
+    },
+    "regional_breakdown": {
+      "NR": {
+        "baseline_mismatch_mu_day": 142.15,
+        "reconciled_mismatch_mu_day": 60.93,
+        "avoided_mismatch_mu_year": 29668.5,
+        "pct_lower": 57.14
+      },
+      "WR": {
+        "baseline_mismatch_mu_day": 109.86,
+        "reconciled_mismatch_mu_day": 36.07,
+        "avoided_mismatch_mu_year": 26949.9,
+        "pct_lower": 67.16
+      },
+      "SR": {
+        "baseline_mismatch_mu_day": 97.81,
+        "reconciled_mismatch_mu_day": 35.87,
+        "avoided_mismatch_mu_year": 22624.9,
+        "pct_lower": 63.33
+      },
+      "ER": {
+        "baseline_mismatch_mu_day": 42.51,
+        "reconciled_mismatch_mu_day": 20.1,
+        "avoided_mismatch_mu_year": 8185.9,
+        "pct_lower": 52.72
+      },
+      "NER": {
+        "baseline_mismatch_mu_day": 4.9,
+        "reconciled_mismatch_mu_day": 3.06,
+        "avoided_mismatch_mu_year": 669.3,
+        "pct_lower": 37.43
+      }
+    },
+    "valuation": {
+      "user_case": {
+        "price_under_per_kwh": 6.5,
+        "price_over_per_kwh": 3.5,
+        "value_rupees": 567152780105.0,
+        "value_crores": 56715.28
+      },
+      "low_case": {
+        "price_under_per_kwh": 4.5,
+        "price_over_per_kwh": 2.5,
+        "value_rupees": 392784931446.73,
+        "value_crores": 39278.49,
+        "citation": {
+          "price_under_per_kwh": 4.5,
+          "price_over_per_kwh": 2.5,
+          "blended_average_per_kwh": 3.5,
+          "source": "Baseload thermal energy charge / off-peak bilateral trade rate",
+          "date": "2024-01-01",
+          "citation": "CERC Multi-Year Tariff Regulations 2024-29 Energy Charge Rate benchmarks"
+        }
+      },
+      "base_case": {
+        "price_under_per_kwh": 6.5,
+        "price_over_per_kwh": 3.5,
+        "value_rupees": 567152780105.0,
+        "value_crores": 56715.28,
+        "citation": {
+          "price_under_per_kwh": 6.5,
+          "price_over_per_kwh": 3.5,
+          "blended_average_per_kwh": 5.0,
+          "source": "IEX Day-Ahead Market (DAM) average peak clearing price and CERC Deviation Settlement Mechanism (DSM) Regulations 2022/2024",
+          "date": "2024-03-31",
+          "citation": "CERC Report on Market Monitoring of Power Exchanges in India (FY 2023-24) and DSM Order dated March 2024"
+        }
+      },
+      "high_case": {
+        "price_under_per_kwh": 9.5,
+        "price_over_per_kwh": 4.5,
+        "value_rupees": 827790009161.15,
+        "value_crores": 82779.0,
+        "citation": {
+          "price_under_per_kwh": 9.5,
+          "price_over_per_kwh": 4.5,
+          "blended_average_per_kwh": 7.0,
+          "source": "CERC High-Price Day Ahead Market (HP-DAM) ceiling order and summer peak emergency procurement rate",
+          "date": "2024-03-26",
+          "citation": "CERC Order in Petition No. 04/SM/2024 capping HP-DAM at \u20b910.00/kWh during summer peak months"
+        }
+      }
+    },
+    "planning_inconsistency": {
+      "mean_daily_gap_mu": 281.37,
+      "annualized_gap_mu": 102770.0,
+      "note": "Average daily MU discrepancy between the sum of unreconciled regional forecasts and the national forecast. Reported separately; not added to avoided physical mismatch."
+    },
+    "headline_text": "Avoided forecast mismatch: 88,098.5 MU per year (60.72 percent lower than baseline), worth about \u20b956,715.28 Crores (567,152,780,105 rupees) at the prices shown.",
+    "note": "This estimates avoided over- or under-procurement relative to the stated baseline; it is not electricity physically saved and not evidence of what a government would save.",
+    "citable_price_sources": {
+      "base_case": {
+        "price_under_per_kwh": 6.5,
+        "price_over_per_kwh": 3.5,
+        "blended_average_per_kwh": 5.0,
+        "source": "IEX Day-Ahead Market (DAM) average peak clearing price and CERC Deviation Settlement Mechanism (DSM) Regulations 2022/2024",
+        "date": "2024-03-31",
+        "citation": "CERC Report on Market Monitoring of Power Exchanges in India (FY 2023-24) and DSM Order dated March 2024"
+      },
+      "low_case": {
+        "price_under_per_kwh": 4.5,
+        "price_over_per_kwh": 2.5,
+        "blended_average_per_kwh": 3.5,
+        "source": "Baseload thermal energy charge / off-peak bilateral trade rate",
+        "date": "2024-01-01",
+        "citation": "CERC Multi-Year Tariff Regulations 2024-29 Energy Charge Rate benchmarks"
+      },
+      "high_case": {
+        "price_under_per_kwh": 9.5,
+        "price_over_per_kwh": 4.5,
+        "blended_average_per_kwh": 7.0,
+        "source": "CERC High-Price Day Ahead Market (HP-DAM) ceiling order and summer peak emergency procurement rate",
+        "date": "2024-03-26",
+        "citation": "CERC Order in Petition No. 04/SM/2024 capping HP-DAM at \u20b910.00/kWh during summer peak months"
+      }
+    }
+  },
+  "day_ahead_persistence": {
+    "baseline_name": "day_ahead_persistence",
+    "horizon": 1,
+    "test_days_count": 983,
+    "test_period_start": "2024-01-04",
+    "test_period_end": "2026-09-12",
+    "mean_daily_baseline_mismatch_mu": 126.98,
+    "mean_daily_reconciled_mismatch_mu": 156.03,
+    "mean_daily_avoided_mismatch_mu": -29.04,
+    "annualized_avoided_mismatch_mu": -10608.2,
+    "pct_lower_than_baseline": -22.87,
+    "bootstrap_ci_95": {
+      "ci_lower_mu_year": -14304.7,
+      "ci_upper_mu_year": -7312.7,
+      "confidence_level_pct": 95.0,
+      "block_size_days": 7,
+      "n_bootstraps": 1000
+    },
+    "regional_breakdown": {
+      "NR": {
+        "baseline_mismatch_mu_day": 43.1,
+        "reconciled_mismatch_mu_day": 60.93,
+        "avoided_mismatch_mu_year": -6511.7,
+        "pct_lower": -41.37
+      },
+      "WR": {
+        "baseline_mismatch_mu_day": 29.83,
+        "reconciled_mismatch_mu_day": 36.07,
+        "avoided_mismatch_mu_year": -2278.3,
+        "pct_lower": -20.91
+      },
+      "SR": {
+        "baseline_mismatch_mu_day": 36.12,
+        "reconciled_mismatch_mu_day": 35.87,
+        "avoided_mismatch_mu_year": 90.7,
+        "pct_lower": 0.69
+      },
+      "ER": {
+        "baseline_mismatch_mu_day": 15.59,
+        "reconciled_mismatch_mu_day": 20.1,
+        "avoided_mismatch_mu_year": -1645.8,
+        "pct_lower": -28.9
+      },
+      "NER": {
+        "baseline_mismatch_mu_day": 2.34,
+        "reconciled_mismatch_mu_day": 3.06,
+        "avoided_mismatch_mu_year": -263.1,
+        "pct_lower": -30.76
+      }
+    },
+    "valuation": {
+      "user_case": {
+        "price_under_per_kwh": 6.5,
+        "price_over_per_kwh": 3.5,
+        "value_rupees": -42088569082.44,
+        "value_crores": -4208.86
+      },
+      "low_case": {
+        "price_under_per_kwh": 4.5,
+        "price_over_per_kwh": 2.5,
+        "value_rupees": -29827085011.82,
+        "value_crores": -2982.71,
+        "citation": {
+          "price_under_per_kwh": 4.5,
+          "price_over_per_kwh": 2.5,
+          "blended_average_per_kwh": 3.5,
+          "source": "Baseload thermal energy charge / off-peak bilateral trade rate",
+          "date": "2024-01-01",
+          "citation": "CERC Multi-Year Tariff Regulations 2024-29 Energy Charge Rate benchmarks"
+        }
+      },
+      "base_case": {
+        "price_under_per_kwh": 6.5,
+        "price_over_per_kwh": 3.5,
+        "value_rupees": -42088569082.44,
+        "value_crores": -4208.86,
+        "citation": {
+          "price_under_per_kwh": 6.5,
+          "price_over_per_kwh": 3.5,
+          "blended_average_per_kwh": 5.0,
+          "source": "IEX Day-Ahead Market (DAM) average peak clearing price and CERC Deviation Settlement Mechanism (DSM) Regulations 2022/2024",
+          "date": "2024-03-31",
+          "citation": "CERC Report on Market Monitoring of Power Exchanges in India (FY 2023-24) and DSM Order dated March 2024"
+        }
+      },
+      "high_case": {
+        "price_under_per_kwh": 9.5,
+        "price_over_per_kwh": 4.5,
+        "value_rupees": -56003303482.54,
+        "value_crores": -5600.33,
+        "citation": {
+          "price_under_per_kwh": 9.5,
+          "price_over_per_kwh": 4.5,
+          "blended_average_per_kwh": 7.0,
+          "source": "CERC High-Price Day Ahead Market (HP-DAM) ceiling order and summer peak emergency procurement rate",
+          "date": "2024-03-26",
+          "citation": "CERC Order in Petition No. 04/SM/2024 capping HP-DAM at \u20b910.00/kWh during summer peak months"
+        }
+      }
+    },
+    "planning_inconsistency": {
+      "mean_daily_gap_mu": 152.35,
+      "annualized_gap_mu": 55644.9,
+      "note": "Average daily MU discrepancy between the sum of unreconciled regional forecasts and the national forecast. Reported separately; not added to avoided physical mismatch."
+    },
+    "headline_text": "Avoided forecast mismatch: -10,608.2 MU per year (-22.87 percent lower than baseline), worth about \u20b9-4,208.86 Crores (-42,088,569,082 rupees) at the prices shown.",
+    "note": "This estimates avoided over- or under-procurement relative to the stated baseline; it is not electricity physically saved and not evidence of what a government would save.",
+    "citable_price_sources": {
+      "base_case": {
+        "price_under_per_kwh": 6.5,
+        "price_over_per_kwh": 3.5,
+        "blended_average_per_kwh": 5.0,
+        "source": "IEX Day-Ahead Market (DAM) average peak clearing price and CERC Deviation Settlement Mechanism (DSM) Regulations 2022/2024",
+        "date": "2024-03-31",
+        "citation": "CERC Report on Market Monitoring of Power Exchanges in India (FY 2023-24) and DSM Order dated March 2024"
+      },
+      "low_case": {
+        "price_under_per_kwh": 4.5,
+        "price_over_per_kwh": 2.5,
+        "blended_average_per_kwh": 3.5,
+        "source": "Baseload thermal energy charge / off-peak bilateral trade rate",
+        "date": "2024-01-01",
+        "citation": "CERC Multi-Year Tariff Regulations 2024-29 Energy Charge Rate benchmarks"
+      },
+      "high_case": {
+        "price_under_per_kwh": 9.5,
+        "price_over_per_kwh": 4.5,
+        "blended_average_per_kwh": 7.0,
+        "source": "CERC High-Price Day Ahead Market (HP-DAM) ceiling order and summer peak emergency procurement rate",
+        "date": "2024-03-26",
+        "citation": "CERC Order in Petition No. 04/SM/2024 capping HP-DAM at \u20b910.00/kWh during summer peak months"
+      }
+    }
+  }
+}
