@@ -1,216 +1,170 @@
-import { useState, useEffect, useCallback } from "react";
-import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Tooltip,
-} from "chart.js";
-import {
-  checkHealth,
-  getHierarchySnapshot,
-  getAvailableNodes,
-  getNodeForecast,
-  ingestActual,
-} from "./api";
+import React, { useState, useEffect } from "react";
+import { checkHealth } from "./api";
+import OverviewPage from "./pages/OverviewPage";
+import ForecastPage from "./pages/ForecastPage";
+import HierarchyExplorerPage from "./pages/HierarchyExplorerPage";
+import ScenarioSimulatorPage from "./pages/ScenarioSimulatorPage";
+import BacktestPage from "./pages/BacktestPage";
+import SavingsPage from "./pages/SavingsPage";
+import MethodAndLimitsPage from "./pages/MethodAndLimitsPage";
 import "./App.css";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip);
+const PAGES = [
+  { id: "overview", label: "Overview", icon: "⚡" },
+  { id: "forecast", label: "Forecast", icon: "📈" },
+  { id: "hierarchy", label: "Hierarchy Explorer", icon: "🌳" },
+  { id: "scenario", label: "Scenario Simulator", icon: "🎛️" },
+  { id: "backtest", label: "Holdout Backtest", icon: "🧪" },
+  { id: "savings", label: "Avoided Mismatch", icon: "💰" },
+  { id: "method", label: "Method & Limits", icon: "📖" },
+];
 
-function App() {
-  const [connStatus, setConnStatus] = useState("connecting to local API…");
-  const [snapshot, setSnapshot] = useState(null);
-  const [nodes, setNodes] = useState([]);
-  const [selectedNode, setSelectedNode] = useState("India");
-  const [chartData, setChartData] = useState(null);
-  const [ingestForm, setIngestForm] = useState({ node_id: "India", date: "2025-01-05", actual_value: "4237.5" });
-  const [ingestResult, setIngestResult] = useState(null);
+function getInitialPage() {
+  const hash = window.location.hash.replace("#", "");
+  const match = PAGES.find((p) => p.id === hash);
+  return match ? match.id : "overview";
+}
 
-  useEffect(() => {
-    async function init() {
-      try {
-        const health = await checkHealth();
-        setConnStatus(`connected — ${health.status}`);
-      } catch {
-        setConnStatus("cannot reach API — is uvicorn running?");
-        return;
-      }
-      const snap = await getHierarchySnapshot();
-      setSnapshot(snap);
-      const nodeList = await getAvailableNodes();
-      setNodes(nodeList.nodes);
-    }
-    init();
-  }, []);
-
-  const loadChart = useCallback(async (nodeId) => {
-    const data = await getNodeForecast(nodeId);
-    setChartData({
-      labels: data.forecast.map((d) => d.date),
-      datasets: [
-        {
-          label: "base",
-          data: data.forecast.map((d) => d.base_forecast),
-          borderColor: "#8FA3A3",
-          borderWidth: 1.5,
-          pointRadius: 0,
-          tension: 0.15,
-        },
-        {
-          label: "reconciled",
-          data: data.forecast.map((d) => d.reconciled_forecast),
-          borderColor: "#4FD1C5",
-          borderWidth: 2,
-          pointRadius: 0,
-          tension: 0.15,
-        },
-      ],
-    });
-  }, []);
-
-  useEffect(() => {
-    if (nodes.length > 0) loadChart(selectedNode);
-  }, [nodes, selectedNode, loadChart]);
-
-  async function handleIngest() {
-    const result = await ingestActual(
-      ingestForm.node_id,
-      ingestForm.date,
-      parseFloat(ingestForm.actual_value)
-    );
-    setIngestResult(result);
+// React Error Boundary to catch any page-level exceptions gracefully
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
   }
 
-  const regionSum = snapshot
-    ? Object.values(snapshot.regions).reduce((a, b) => a + b, 0)
-    : 0;
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error("ErrorBoundary caught an error:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="panel error-state">
+          <h3>Component Error</h3>
+          <p>{this.state.error?.message || "An unexpected rendering error occurred."}</p>
+          <button
+            onClick={() => {
+              this.setState({ hasError: false, error: null });
+              window.location.reload();
+            }}
+            className="btn btn-amber"
+          >
+            Reload Page
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+export default function App() {
+  const [currentPage, setCurrentPage] = useState(getInitialPage);
+  const [connStatus, setConnStatus] = useState("connecting…");
+  const [isOnline, setIsOnline] = useState(false);
+
+  // Sync hash routing with window state
+  useEffect(() => {
+    function handleHashChange() {
+      const hash = window.location.hash.replace("#", "");
+      if (PAGES.some((p) => p.id === hash)) {
+        setCurrentPage(hash);
+      }
+    }
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
+
+  function navigate(pageId) {
+    setCurrentPage(pageId);
+    window.history.pushState(null, "", `#${pageId}`);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // Health check on mount and interval
+  useEffect(() => {
+    async function verifyHealth() {
+      try {
+        const health = await checkHealth();
+        if (health && health.status === "ok") {
+          setConnStatus(`connected — ${health.version || "ok"}`);
+          setIsOnline(true);
+        } else {
+          setConnStatus("API connected (degraded)");
+          setIsOnline(true);
+        }
+      } catch {
+        setConnStatus("cannot reach API (uvicorn 127.0.0.1:8000)");
+        setIsOnline(false);
+      }
+    }
+    verifyHealth();
+    const interval = setInterval(verifyHealth, 15000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="app">
+      {/* Top Header */}
       <header>
-        <h1>TerraWatt</h1>
-        <div className="status">
-          <span className="dot"></span>
-          {connStatus}
+        <div className="brand">
+          <div className="brand-icon">⚡</div>
+          <div>
+            <h1>TerraWatt <span className="version-pill mono">v2.0</span></h1>
+            <div className="brand-sub mono">National Grid Hierarchical Demand &amp; Stress Platform</div>
+          </div>
+        </div>
+        <div className="header-right">
+          <div className={`status ${isOnline ? "online" : "offline"}`}>
+            <span className="dot"></span>
+            <span className="mono">{connStatus}</span>
+          </div>
         </div>
       </header>
 
-      <div className="hero">
-        <div>
-          <div className="hero-label">National demand, latest reconciled forecast</div>
-          <div className="hero-value">
-            {snapshot ? snapshot.national.toFixed(0) : "—"}
-            <span className="unit"> MU / day</span>
-          </div>
-        </div>
-        <div className="hero-date">{snapshot ? snapshot.date : ""}</div>
-      </div>
+      {/* Main Navigation Bar */}
+      <nav className="main-nav" aria-label="Main Navigation">
+        {PAGES.map((page) => (
+          <button
+            key={page.id}
+            onClick={() => navigate(page.id)}
+            className={`nav-btn ${currentPage === page.id ? "active" : ""}`}
+            aria-current={currentPage === page.id ? "page" : undefined}
+          >
+            <span className="nav-icon">{page.icon}</span>
+            <span className="nav-label">{page.label}</span>
+          </button>
+        ))}
+      </nav>
 
-      {snapshot && (
-        <>
-          <div className="regions">
-            {Object.entries(snapshot.regions).map(([name, val]) => (
-              <div className="region-card" key={name}>
-                <div className="name">{name}</div>
-                <div className="value mono">
-                  {val.toFixed(1)}
-                  <span className="unit"> MU</span>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="coherence-note">
-            Sum of regions: {regionSum.toFixed(2)} MU — matches national total to within
-            rounding (coherence verified).
-          </div>
-        </>
-      )}
+      {/* Page Routing wrapped in Error Boundary */}
+      <main id="main-content">
+        <ErrorBoundary key={currentPage}>
+          {currentPage === "overview" && <OverviewPage />}
+          {currentPage === "forecast" && <ForecastPage />}
+          {currentPage === "hierarchy" && <HierarchyExplorerPage />}
+          {currentPage === "scenario" && <ScenarioSimulatorPage />}
+          {currentPage === "backtest" && <BacktestPage />}
+          {currentPage === "savings" && <SavingsPage />}
+          {currentPage === "method" && <MethodAndLimitsPage />}
+        </ErrorBoundary>
+      </main>
 
-      <div className="panel">
-        <div className="panel-head">
-          <h2>Forecast vs. base model, by node</h2>
-          <select value={selectedNode} onChange={(e) => setSelectedNode(e.target.value)}>
-            {nodes.map((n) => (
-              <option key={n} value={n}>
-                {n}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="legend">
-          <span>
-            <span className="swatch" style={{ background: "#8FA3A3" }}></span>base model
-          </span>
-          <span>
-            <span className="swatch" style={{ background: "#4FD1C5" }}></span>reconciled (MinT)
-          </span>
-        </div>
-        {chartData && (
-          <Line
-            data={chartData}
-            options={{
-              responsive: true,
-              plugins: { legend: { display: false } },
-              scales: {
-                x: { ticks: { color: "#8FA3A3", maxTicksLimit: 10 }, grid: { color: "#223638" } },
-                y: { ticks: { color: "#8FA3A3" }, grid: { color: "#223638" } },
-              },
-            }}
-          />
-        )}
-      </div>
-
-      <div className="panel">
-        <div className="panel-head">
-          <h2>Simulate incoming telemetry</h2>
-        </div>
-        <div className="ingest-row">
-          <input
-            className="mono"
-            value={ingestForm.node_id}
-            onChange={(e) => setIngestForm({ ...ingestForm, node_id: e.target.value })}
-            placeholder="node id"
-          />
-          <input
-            className="mono"
-            value={ingestForm.date}
-            onChange={(e) => setIngestForm({ ...ingestForm, date: e.target.value })}
-            placeholder="YYYY-MM-DD"
-          />
-          <input
-            className="mono"
-            value={ingestForm.actual_value}
-            onChange={(e) => setIngestForm({ ...ingestForm, actual_value: e.target.value })}
-            placeholder="actual value"
-          />
-          <button onClick={handleIngest}>Ingest</button>
-        </div>
-        {ingestResult && (
-          <div className="ingest-result">
-            {ingestResult.comparison ? (
-              <>
-                Ingested. Forecast was{" "}
-                <span className="mono">{ingestResult.comparison.reconciled_forecast}</span>,
-                actual <span className="mono">{ingestResult.comparison.actual}</span> — error{" "}
-                <span className={`mono ${ingestResult.comparison.error >= 0 ? "err-pos" : "err-neg"}`}>
-                  {ingestResult.comparison.error} ({ingestResult.comparison.error_pct}%)
-                </span>
-              </>
-            ) : (
-              "Ingested. No existing forecast for that date/node to compare against."
-            )}
-          </div>
-        )}
-      </div>
-
+      {/* Footer */}
       <footer>
-        API: <span className="mono">http://127.0.0.1:8000</span> — run{" "}
-        <span className="mono">uvicorn api.main:app --reload</span> in the project root.
+        <div className="footer-content mono">
+          <div>
+            Data: GRID-INDIA (POSOCO) NLDC daily reports | Compiled by Robbie Andrew
+          </div>
+          <div>
+            TerraWatt v2.0.0 • Machine-precision MinTrace Coherence (&lt; 10⁻¹² MU)
+          </div>
+        </div>
       </footer>
     </div>
   );
 }
-
-export default App;
