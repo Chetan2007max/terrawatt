@@ -1,0 +1,14 @@
+{
+  "drift_detected": false,
+  "status": "HEALTHY",
+  "last_checked_timestamp": "2026-10-30T17:05:32.491371+00:00",
+  "latest_telemetry_date": "2026-09-12",
+  "reference_date": "2026-09-12",
+  "days_since_latest_telemetry": 0,
+  "evaluation_window_days": 30,
+  "recent_national_mae_mu_day": 66.44,
+  "recent_national_wape_percent": 1.2,
+  "threshold_wape_percent": 8.0,
+  "staleness_warning": null,
+  "retraining_instructions": "To retrain models with updated data: execute `python scripts/cli.py train --seed 42`, recompute holdout metrics via `python scripts/cli.py evaluate`, and redeploy."
+}
