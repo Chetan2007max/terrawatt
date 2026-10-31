@@ -101,3 +101,4 @@ The backend microservice is implemented with FastAPI (running ASGI on port 8000)
 - `GET /api/v1/backtest`: Out-of-sample metrics (WAPE, MAPE, RMSE, MAE) across 983 holdout days.
 - `GET /api/v1/savings`: Avoided mismatch volume (MU) and economic valuation under CERC DSM price brackets.
 - `GET /api/v1/alerts`: Rule-based stress indicators (watch, info, critical).
+

@@ -67,3 +67,4 @@
   - Roving tabindexes on segmented controls; Escape key cleanly closes slide-in drawers and node detail panels.
 - **Responsive Layout:**
   - Verified across 360px (mobile), 768px (tablet), 1280px (desktop), and 1920px (ultrawide) without horizontal body overflow.
+
