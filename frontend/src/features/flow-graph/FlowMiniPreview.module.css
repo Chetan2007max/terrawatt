@@ -1,0 +1,162 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  gap: var(--space-3);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.preTitle {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.title {
+  font-size: var(--font-size-body);
+  font-weight: 600;
+  color: var(--charcoal);
+}
+
+.badgeRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.coherenceBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--turf-green-dim);
+  border: 1px solid var(--turf-green);
+  color: var(--turf-green);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+}
+
+.greenDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--turf-green);
+}
+
+.dateStamp {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--slate);
+}
+
+.svgWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid rgba(88, 111, 124, 0.14);
+  border-radius: var(--radius-sm);
+  background: var(--ghost);
+  padding: var(--space-2) 0;
+}
+
+.svg {
+  width: 100%;
+  max-width: 840px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.nodeRectNational {
+  fill: var(--charcoal);
+}
+
+.nodeLabelNational {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  fill: var(--charcoal);
+}
+
+.nodeValueNational {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  fill: var(--slate);
+}
+
+.ribbonGroup {
+  cursor: pointer;
+  outline: none;
+}
+
+.ribbon {
+  opacity: 0.65;
+  transition: opacity 160ms ease, fill-opacity 160ms ease;
+}
+
+.ribbon:hover, .ribbonActive {
+  opacity: 0.95;
+}
+
+.ribbonFaded {
+  opacity: 0.2;
+}
+
+.nodeRect {
+  transition: transform 140ms ease;
+}
+
+.regionLabel {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  fill: var(--charcoal);
+  user-select: none;
+}
+
+.infoStrip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--ghost);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  color: var(--charcoal);
+  min-height: 34px;
+}
+
+.infoDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.stateList {
+  color: var(--slate);
+  margin-left: auto;
+}
+
+.hint {
+  color: var(--slate);
+  font-style: italic;
+}
+

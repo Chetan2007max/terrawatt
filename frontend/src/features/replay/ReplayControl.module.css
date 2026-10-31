@@ -1,0 +1,136 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+  gap: var(--space-2);
+}
+
+.controlsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.buttonGroup {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: var(--ghost);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--charcoal);
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.iconBtn:hover:not(:disabled) {
+  background: var(--surface);
+  border-color: var(--safety-blue);
+  color: var(--safety-blue);
+}
+
+.iconBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.playBtn {
+  background: var(--safety-blue);
+  color: #FFFFFF;
+  border-color: var(--safety-blue);
+}
+
+.playBtn:hover:not(:disabled) {
+  background: var(--safety-blue-hover);
+  color: #FFFFFF;
+}
+
+.speedBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 0 8px;
+  background: var(--ghost);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--slate);
+  cursor: pointer;
+  margin-left: 4px;
+}
+
+.speedBtn:hover {
+  color: var(--charcoal);
+  border-color: var(--slate);
+}
+
+.dateDisplay {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--charcoal);
+}
+
+.dateLabel {
+  color: var(--slate);
+  font-size: 11px;
+}
+
+.stepCounter {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--slate);
+}
+
+.scrubberRow {
+  width: 100%;
+}
+
+.scrubber {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: rgba(88, 111, 124, 0.2);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.scrubber::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--safety-blue);
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(23, 23, 23, 0.2);
+}
+
+.scrubber::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--safety-blue);
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(23, 23, 23, 0.2);
+}
+

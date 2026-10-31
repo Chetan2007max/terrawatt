@@ -1,0 +1,59 @@
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--space-4);
+}
+
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.headerQuestion {
+  font-size: var(--font-size-body);
+  color: var(--slate);
+  margin-top: var(--space-2);
+}
+
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.flowLayout {
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-start;
+  position: relative;
+}
+
+.graphContainer {
+  flex: 1;
+  min-width: 0;
+}
+
+.sidePanelSlot {
+  flex-shrink: 0;
+  width: 340px;
+  position: sticky;
+  top: var(--space-4);
+}
+
+@media (max-width: 1024px) {
+  .flowLayout {
+    flex-direction: column;
+  }
+  .sidePanelSlot {
+    width: 100%;
+    position: static;
+  }
+}
+

@@ -1,0 +1,192 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.coherenceBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--ghost);
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.reconciledBanner {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--turf-green);
+  font-size: var(--font-size-sm);
+}
+
+.coherentDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--turf-green);
+  box-shadow: 0 0 6px var(--turf-green);
+}
+
+.unreconciledBanner {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--signal-red);
+  font-size: var(--font-size-sm);
+}
+
+.watchDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--hivis-yellow);
+  border: 1px solid var(--charcoal);
+}
+
+.bannerSub {
+  font-size: var(--font-size-xs);
+  color: var(--slate);
+  margin-left: var(--space-2);
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--font-size-xs);
+  color: var(--slate);
+}
+
+.legendTitle {
+  font-weight: 600;
+  color: var(--charcoal);
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.colorPill {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.svgScrollContainer {
+  width: 100%;
+  overflow-x: auto;
+  padding: var(--space-4) 0;
+  background: var(--surface);
+}
+
+.svg {
+  width: 100%;
+  max-width: 1120px;
+  min-width: 860px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.colHeader {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.nodeGroup {
+  cursor: pointer;
+  outline: none;
+}
+
+.nodeGroup:focus-visible rect {
+  stroke: var(--electric-blue);
+  stroke-width: 2px;
+}
+
+.nationalRect {
+  fill: var(--charcoal);
+  transition: opacity 140ms ease;
+}
+
+.nationalLabel {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  fill: var(--charcoal);
+}
+
+.nationalValue {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  fill: var(--slate);
+}
+
+.ribbon {
+  opacity: 0.55;
+  cursor: pointer;
+  transition: opacity 160ms ease, fill-opacity 160ms ease;
+}
+
+.stateRibbon {
+  opacity: 0.45;
+  cursor: pointer;
+  transition: opacity 160ms ease;
+}
+
+.ribbon:hover, .stateRibbon:hover, .ribbonActive {
+  opacity: 0.95;
+}
+
+.ribbonFaded {
+  opacity: 0.14;
+}
+
+.regionRect, .stateRect {
+  transition: transform 120ms ease;
+}
+
+.regionText {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  fill: var(--charcoal);
+  user-select: none;
+}
+
+.gapText {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  fill: var(--signal-red);
+}
+
+.stateLabel {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  fill: var(--charcoal);
+  user-select: none;
+}
+
+.stateVal {
+  font-family: var(--font-mono);
+  fill: var(--slate);
+  margin-left: 2px;
+}
+
+.selectedNode rect {
+  stroke: var(--electric-blue);
+  stroke-width: 2.5px;
+}
+

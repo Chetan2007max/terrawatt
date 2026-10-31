@@ -1,0 +1,190 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 360px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(23, 23, 23, 0.08);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--ghost);
+}
+
+.levelBadge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--slate);
+  letter-spacing: 0.05em;
+}
+
+.title {
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--charcoal);
+  margin-top: 2px;
+}
+
+.closeBtn {
+  background: transparent;
+  border: none;
+  color: var(--slate);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeBtn:hover {
+  color: var(--charcoal);
+  background-color: rgba(88, 111, 124, 0.12);
+}
+
+.body {
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.description {
+  font-size: var(--font-size-xs);
+  color: var(--slate);
+  line-height: 1.5;
+}
+
+.kpiCard {
+  background: var(--ghost);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.kpiRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.kpiLabel {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--slate);
+  letter-spacing: 0.04em;
+}
+
+.dateStamp {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--slate);
+}
+
+.valRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-1);
+}
+
+.value {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--charcoal);
+  line-height: 1.1;
+}
+
+.kpiSentence {
+  font-size: var(--font-size-xs);
+  color: var(--charcoal);
+  line-height: 1.4;
+  margin-top: 2px;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+}
+
+.statBox {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--ghost);
+  border: 1px solid var(--border-color);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+.statLabel {
+  font-size: 10px;
+  color: var(--slate);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.statBox strong {
+  font-size: var(--font-size-sm);
+  color: var(--charcoal);
+}
+
+.sparklineSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  border-top: 1px solid var(--border-color);
+  padding-top: var(--space-3);
+}
+
+.sparklineHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.sparklineLabel {
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  color: var(--charcoal);
+}
+
+.sparklineRange {
+  font-size: 11px;
+  color: var(--slate);
+}
+
+.stressSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.stressLabel {
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  color: var(--slate);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  border-top: 1px solid var(--border-color);
+  padding-top: var(--space-3);
+}
+
