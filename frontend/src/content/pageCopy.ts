@@ -11,29 +11,29 @@ export interface PageHeaderCopy {
 
 export const PAGE_COPY: Record<string, PageHeaderCopy> = {
   overview: {
-    title: 'National Electricity Demand Overview',
-    question: 'How much electricity is India forecast to use, and how is demand trending across regions?',
-    dataSentenceTemplate: 'Forecast for {date}: {value} MU. That is {trend} above the same weekday last week.',
+    title: 'Forecast for India, next day',
+    question: 'How much electricity is India forecast to use tomorrow, and how does demand split across regions?',
+    dataSentenceTemplate: 'For 13 Sep 2026, made on 12 Sep 2026: {value} MU. That is {trend} above the same weekday last week.',
     helpDrawer: {
-      plotted: 'Daily electricity demand forecast for India and the five electrical regions (Northern, Western, Southern, Eastern, North Eastern) in Million Units (MU/day).',
-      howToRead: 'The headline number shows total national electricity needed tomorrow. The sparkline illustrates the 14-day trajectory. Below it, regional cards show the geographical split.',
+      plotted: 'Daily electricity demand forecast for India and the five electrical regions (Northern, Western, Southern, Eastern, North Eastern) in Million Units (MU per day).',
+      howToRead: 'The headline number shows total national electricity needed tomorrow (for 13 Sep 2026, made on 12 Sep 2026). The regional cards show the geographical split.',
       caveat: 'Statistical forecast based on historical calendar, weather, and load patterns. Not a physical dispatch instruction.',
     },
   },
   forecast: {
-    title: 'Multi-Horizon Electricity Forecast',
-    question: 'How does daily electricity demand evolve over 1 to 14 days, and what are the confidence bounds?',
-    dataSentenceTemplate: 'At 14-day horizon, national demand is expected at {value} MU with a 90% range of {lower} to {upper} MU.',
+    title: 'India demand, next 14 days',
+    question: 'How does daily electricity demand evolve over 1 to 14 days, and what are the expected ranges?',
+    dataSentenceTemplate: 'At 14-day horizon, national demand is expected at {value} MU with an expected range of {lower} to {upper} MU.',
     helpDrawer: {
-      plotted: 'Forecast demand curve from tomorrow (Day 1) out to two weeks (Day 14), with 90% and 95% split-conformal prediction intervals.',
-      howToRead: 'The solid blue line is the reconciled forecast. The shaded band shows the range where actual demand is expected to land 90% of the time based on past test accuracy.',
+      plotted: 'Forecast demand curve from tomorrow (Day 1) out to two weeks (Day 14), with calibrated prediction intervals.',
+      howToRead: 'The solid blue line is the reconciled forecast. Shaded bands show the expected range. On past data the real value fell inside the dark band 90 percent of the time.',
       caveat: 'Prediction bands reflect historical out-of-sample forecast variance; extreme grid disruptions (storms, unplanned generation outages) may fall outside.',
     },
   },
   'energy-flow': {
-    title: 'Hierarchical Energy Flow & Coherence',
+    title: 'Hierarchical energy flow & coherence',
     question: 'How does electricity demand split across India’s regions and states, and do the parts add up to the whole?',
-    dataSentenceTemplate: 'All 51 nodes add up: state sums match regional totals, and regional totals match India to zero error ({gap} MU gap).',
+    dataSentenceTemplate: 'The five regions add up to the national total to zero error ({gap} MU gap).',
     helpDrawer: {
       plotted: 'Sankey diagram tracing the distribution of electricity demand from the National Total through 5 Regions to 45 individual States and industrial bulk consumers.',
       howToRead: 'Ribbon thickness is proportional to daily electricity volume (MU). Hovering any path shows that node’s exact share of parent and national total.',
@@ -41,7 +41,7 @@ export const PAGE_COPY: Record<string, PageHeaderCopy> = {
     },
   },
   scenario: {
-    title: 'Stress Scenario Simulator',
+    title: 'Stress scenario simulator',
     question: 'What happens to the power grid if one state or region suffers an extreme heatwave or demand surge?',
     dataSentenceTemplate: 'Simulated a {shock}% demand shock on {target}. The mathematical solver redistributed {delta} MU across related nodes.',
     helpDrawer: {
@@ -51,23 +51,23 @@ export const PAGE_COPY: Record<string, PageHeaderCopy> = {
     },
   },
   backtest: {
-    title: 'Hold-Out Backtest & Accuracy Audit',
+    title: 'Hold-out backtest & accuracy audit',
     question: 'How accurate was the forecasting model on 983 frozen test days that the algorithm never saw during training?',
-    dataSentenceTemplate: 'Across 983 holdout test days, reconciled forecasting achieved {wape}% WAPE, outperforming the seasonal naive baseline by {gain}%.',
+    dataSentenceTemplate: 'Across 983 holdout test days, reconciled forecasting achieved {wape}% WAPE, outperforming separate forecasts for each place by {gain}%.',
     helpDrawer: {
-      plotted: 'Side-by-side accuracy comparison across 983 hold-out days (2024 to 2026) between unreconciled and MinTrace reconciled forecasts.',
+      plotted: 'Side-by-side accuracy comparison across 983 hold-out days (2024 to 2026) between separate unadjusted forecasts and MinTrace reconciled forecasts.',
       howToRead: 'Lower error is better. WAPE (Weighted Absolute Percentage Error) weights errors by demand volume so large errors on big days matter more.',
       caveat: 'Evaluation uses strict rolling chronological evaluation with zero future information leakage.',
     },
   },
   savings: {
-    title: 'Avoided Imbalance Cost Valuation',
-    question: 'How much money is saved by using reconciled demand forecasts instead of raw desk guesses or persistence?',
-    dataSentenceTemplate: 'MinTrace reconciliation avoids {avoided} MU of daily mismatch, generating estimated annual avoided costs of ₹{savings} Crore.',
+    title: 'What could better forecasts be worth?',
+    question: 'How much mismatch volume and imbalance cost is avoided by using reconciled forecasts instead of separate desk guesses?',
+    dataSentenceTemplate: 'Forecast error avoided: about 6,900 MU a year, 11 percent less than the baseline.',
     helpDrawer: {
-      plotted: 'Avoided electricity mismatch volumes and economic valuation under standard CERC DSM (Deviation Settlement Mechanism) price tiers.',
-      howToRead: 'Shows reduction in over-scheduling and under-scheduling penalties when grid operators align on a mathematically coherent forecast.',
-      caveat: 'Financial figures are indicative valuations using average CERC settlement brackets; actual dispatch costs depend on real-time market clearing prices.',
+      plotted: 'Avoided electricity mismatch volumes and economic valuation under deviation settlement assumptions.',
+      howToRead: 'How to read this number: Shows reduction in scheduling penalties when grid operators align on a mathematically coherent forecast.',
+      caveat: 'Financial figures are indicative valuations using stated penalty brackets; actual dispatch costs depend on real-time market clearing prices.',
     },
   },
   method: {

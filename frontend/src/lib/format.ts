@@ -39,11 +39,12 @@ export function formatDate(dateStr: string | Date | null | undefined): string {
   if (!dateStr) return '—';
   const dt = typeof dateStr === 'string' ? new Date(dateStr) : dateStr;
   if (isNaN(dt.getTime())) return String(dateStr);
-  return dt.toLocaleDateString('en-GB', {
+  const formatted = dt.toLocaleDateString('en-GB', {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
   }); // e.g. '12 Sep 2026'
+  return formatted.replace('Sept', 'Sep');
 }
 
 export function formatUnit(val: number | null | undefined, unit: string = 'MU', precision: number = 1): string {

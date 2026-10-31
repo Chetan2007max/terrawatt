@@ -57,8 +57,8 @@ export const NodeDetailPanel: React.FC<NodeDetailPanelProps> = ({
         {/* Current Demand Value Block */}
         <div className={styles.kpiCard}>
           <div className={styles.kpiRow}>
-            <span className={styles.kpiLabel}>Current Demand</span>
-            <span className={styles.dateStamp}>14 Sep 2026</span>
+            <span className={styles.kpiLabel}>Forecast Demand</span>
+            <span className={styles.dateStamp}>13 Sep 2026</span>
           </div>
           <div className={styles.valRow}>
             <span className={`${styles.value} tabular`}>{formatNumber(dummyValue, 1)}</span>
