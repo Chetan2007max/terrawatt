@@ -1,0 +1,30 @@
+.term {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: var(--slate);
+  text-underline-offset: 3px;
+  cursor: help;
+  color: inherit;
+}
+
+.term:hover {
+  text-decoration-color: var(--safety-blue);
+  color: var(--safety-blue);
+}
+
+.term:focus-visible {
+  outline: 2px solid var(--safety-blue);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.tooltipTitle {
+  font-weight: 600;
+  margin-bottom: var(--space-1);
+  color: var(--mist);
+}
+
+.tooltipDef {
+  color: var(--ghost);
+}
+

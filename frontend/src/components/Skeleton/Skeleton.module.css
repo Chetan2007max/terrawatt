@@ -1,0 +1,32 @@
+.skeleton {
+  background-color: rgba(88, 111, 124, 0.12);
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .skeleton {
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+}
+
+.rect {
+  border-radius: var(--radius);
+}
+
+.text {
+  border-radius: 3px;
+  margin-top: var(--space-1);
+  margin-bottom: var(--space-1);
+}
+
+.circle {
+  border-radius: 50%;
+}
+

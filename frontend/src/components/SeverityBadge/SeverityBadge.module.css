@@ -1,0 +1,36 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info {
+  background-color: var(--safety-blue-dim);
+  color: var(--safety-blue);
+  border: 1px solid var(--safety-blue);
+}
+
+.watch {
+  background-color: var(--hivis-yellow);
+  color: var(--charcoal);
+  border: 1px solid var(--charcoal); /* Section 3.1: 1px charcoal border */
+}
+
+.critical {
+  background-color: var(--signal-red-dim);
+  color: var(--signal-red);
+  border: 1px solid var(--signal-red);
+}
+
