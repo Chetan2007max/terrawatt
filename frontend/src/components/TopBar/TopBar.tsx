@@ -37,10 +37,6 @@ export const TopBar: React.FC<TopBarProps> = ({
         <div className={styles.inner}>
           <div className={styles.left}>
             <Logo size="md" variant="light" />
-            <div className={styles.liveBadge} title="51-node hierarchy live and calibrated">
-              <span className={styles.pulseDot} />
-              <span>51 Nodes Live</span>
-            </div>
           </div>
 
           <nav className={styles.nav} aria-label="Main Navigation">
@@ -61,7 +57,7 @@ export const TopBar: React.FC<TopBarProps> = ({
 
           <div className={styles.right}>
             <span className={styles.dataAsOf}>
-              Data as of: <strong className="tabular">{formatDate(dataAsOfDate)}</strong>
+              Data as of <strong className="tabular">{formatDate(dataAsOfDate)}</strong>
             </span>
 
             {onThemeToggle && (
@@ -69,11 +65,11 @@ export const TopBar: React.FC<TopBarProps> = ({
                 type="button"
                 onClick={onThemeToggle}
                 className={styles.themeToggle}
-                aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
-                title={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
+                aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+                title={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
               >
                 {theme === 'light' ? <Moon size={15} /> : <Sun size={15} />}
-                <span className={styles.themeLabel}>{theme === 'light' ? 'Dark' : 'Light'}</span>
+                <span className={styles.themeLabel}>{theme === 'light' ? 'Dark mode' : 'Light mode'}</span>
               </button>
             )}
           </div>
