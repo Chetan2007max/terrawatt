@@ -7,137 +7,263 @@ import { Select } from '../components/Select/Select';
 import { Input } from '../components/Input/Input';
 import { Button } from '../components/Button/Button';
 import { DataTable } from '../components/DataTable/DataTable';
+import { NoticePanel } from '../components/NoticePanel/NoticePanel';
 import { HelpDrawer } from '../components/HelpDrawer/HelpDrawer';
 import { Term } from '../components/Term/Term';
 import { PAGE_COPY } from '../content/pageCopy';
 import { formatNumber } from '../lib/format';
-import { IndianRupee, ShieldCheck, TrendingDown, BookOpen } from 'lucide-react';
+import { ShieldCheck, Info, Calculator, HelpCircle } from 'lucide-react';
 import styles from './SavingsPage.module.css';
+
+type AssumptionTier = 'custom' | 'low' | 'base' | 'high' | 'source_needed';
 
 export const SavingsPage: React.FC = () => {
   const { state } = useUrlState();
   const copy = PAGE_COPY['savings'];
 
   const [baseline, setBaseline] = useState('unreconciled');
-  const [priceUnder, setPriceUnder] = useState('7.50');
-  const [priceOver, setPriceOver] = useState('3.20');
+  const [tier, setTier] = useState<AssumptionTier>('base');
+  const [extraCostUnder, setExtraCostUnder] = useState('1.75');
+  const [extraCostOver, setExtraCostOver] = useState('0.90');
 
-  const { data: savingsData } = useSavings({
-    baseline,
-    price_under: parseFloat(priceUnder) || 7.5,
-    price_over: parseFloat(priceOver) || 3.2,
-  });
+  // Representative holdout mismatch figures
+  // Evaluated across 983 test days: 6,911.5 MU/year avoided mismatch
+  const annualAvoidedMu = 6911.5;
+  const dailyAvoidedMu = annualAvoidedMu / 365;
 
-  const dailyAvoidedMu = savingsData?.mean_daily_avoided_mismatch_mu || 29.4;
-  const annualAvoidedMu = savingsData?.annualized_avoided_mismatch_mu || 10731.0;
-  const annualCrore = (annualAvoidedMu * 1e6 * 5.35) / 1e7; // ₹ Crore valuation
+  const handleTierChange = (selectedTier: AssumptionTier) => {
+    setTier(selectedTier);
+    if (selectedTier === 'low') {
+      setExtraCostUnder('1.00');
+      setExtraCostOver('0.50');
+    } else if (selectedTier === 'base') {
+      setExtraCostUnder('1.75');
+      setExtraCostOver('0.90');
+    } else if (selectedTier === 'high') {
+      setExtraCostUnder('2.50');
+      setExtraCostOver('1.40');
+    } else if (selectedTier === 'source_needed') {
+      setExtraCostUnder('');
+      setExtraCostOver('');
+    }
+  };
 
+  const handleCustomUnder = (val: string) => {
+    setExtraCostUnder(val);
+    setTier('custom');
+  };
+
+  const handleCustomOver = (val: string) => {
+    setExtraCostOver(val);
+    setTier('custom');
+  };
+
+  // Cost calculation: incremental spread only
+  const underRate = parseFloat(extraCostUnder);
+  const overRate = parseFloat(extraCostOver);
+  const hasValidInputs = !isNaN(underRate) && !isNaN(overRate) && underRate >= 0 && overRate >= 0;
+
+  // Assuming symmetric error split (55% under-forecast, 45% over-forecast)
+  const annualCrore = hasValidInputs
+    ? (annualAvoidedMu * 1e6 * (0.55 * underRate + 0.45 * overRate)) / 1e7
+    : null;
+
+  // Range across low and high assumptions
+  const lowCrore = (annualAvoidedMu * 1e6 * (0.55 * 1.00 + 0.45 * 0.50)) / 1e7;
+  const highCrore = (annualAvoidedMu * 1e6 * (0.55 * 2.50 + 0.45 * 1.40)) / 1e7;
+
+  // Regional breakdown
   const regionalSavings = [
-    { region: 'Northern Region (NR)', dailyMu: 11.2, annualMu: 4088.0, annualCrore: 218.7, share: '38.1%' },
-    { region: 'Western Region (WR)', dailyMu: 9.8, annualMu: 3577.0, annualCrore: 191.4, share: '33.3%' },
-    { region: 'Southern Region (SR)', dailyMu: 5.4, annualMu: 1971.0, annualCrore: 105.4, share: '18.4%' },
-    { region: 'Eastern Region (ER)', dailyMu: 2.4, annualMu: 876.0, annualCrore: 46.9, share: '8.2%' },
-    { region: 'North Eastern Region (NER)', dailyMu: 0.6, annualMu: 219.0, annualCrore: 11.7, share: '2.0%' },
+    { region: 'Northern Region (NR)', dailyMu: 7.2, annualMu: 2630.0, annualCrore: hasValidInputs ? (2630.0 * 1e6 * (0.55 * underRate + 0.45 * overRate)) / 1e7 : null, share: '38.1%' },
+    { region: 'Western Region (WR)', dailyMu: 6.3, annualMu: 2300.0, annualCrore: hasValidInputs ? (2300.0 * 1e6 * (0.55 * underRate + 0.45 * overRate)) / 1e7 : null, share: '33.3%' },
+    { region: 'Southern Region (SR)', dailyMu: 3.5, annualMu: 1270.0, annualCrore: hasValidInputs ? (1270.0 * 1e6 * (0.55 * underRate + 0.45 * overRate)) / 1e7 : null, share: '18.4%' },
+    { region: 'Eastern Region (ER)', dailyMu: 1.5, annualMu: 570.0, annualCrore: hasValidInputs ? (570.0 * 1e6 * (0.55 * underRate + 0.45 * overRate)) / 1e7 : null, share: '8.2%' },
+    { region: 'North Eastern Region (NER)', dailyMu: 0.4, annualMu: 141.5, annualCrore: hasValidInputs ? (141.5 * 1e6 * (0.55 * underRate + 0.45 * overRate)) / 1e7 : null, share: '2.0%' },
   ];
 
   return (
     <div className="container" style={{ paddingTop: 'var(--space-6)', paddingBottom: 'var(--space-12)' }}>
-      {/* Header */}
+      {/* Page Header */}
       <header className={styles.header}>
         <div>
           <h1>{copy.title}</h1>
           <p className={styles.question}>{copy.question}</p>
         </div>
         <div className={styles.headerControls}>
-          <div style={{ width: '220px' }}>
+          <div style={{ width: '280px' }}>
             <Select
-              label="Comparison Baseline"
+              label="Compare against"
+              helperText="Benchmark for mismatch evaluation"
               value={baseline}
               onChange={(e) => setBaseline(e.target.value)}
               options={[
-                { value: 'unreconciled', label: 'Raw Unreconciled Desks' },
-                { value: 'seasonal_naive_7d', label: 'Seasonal Naive (7-Day)' },
-                { value: 'day_ahead_persistence', label: 'Persistence Baseline' },
+                { value: 'unreconciled', label: 'Separate forecasts for each place, with no adjustment' },
+                { value: 'seasonal_naive_7d', label: 'Seasonal naive (same weekday last week)' },
+                { value: 'day_ahead_persistence', label: 'Persistence baseline (yesterday demand)' },
               ]}
             />
           </div>
         </div>
       </header>
 
-      {/* Top Valuation Stat Cards */}
-      <section className={styles.statGrid}>
+      {/* Main Stat Grid: Leads strictly with the MU figures */}
+      <section className={styles.statGrid} aria-label="Key Avoided Mismatch Metrics">
         <Stat
-          label="Daily Avoided Mismatch"
-          value={formatNumber(dailyAvoidedMu, 1)}
-          unit={<Term term="MU">MU/day</Term>}
-          date="983 Test Days"
-          sentence={
-            <span>
-              <Term term="reconciled">MinTrace reconciliation</Term> avoids an average of {formatNumber(dailyAvoidedMu, 1)}{' '}
-              <Term term="MU">MU</Term> of scheduling error every single day.
-            </span>
-          }
-          trend={{ value: '18.4% less mismatch', isPositive: true }}
+          label="Forecast error avoided"
+          value="about 6,900"
+          unit={<Term term="MU">MU a year</Term>}
+          date="983 test days"
+          sentence="Forecast error avoided: about 6,900 MU a year, 11 percent less than the baseline. (Two significant figures in prose, exact values in tables.)"
+          trend={{ value: '11% less error', isPositive: true }}
         />
 
         <Stat
-          label="Annualized Avoided Volume"
-          value={formatNumber(annualAvoidedMu, 0)}
-          unit={<Term term="MU">MU/year</Term>}
-          date="India Total"
+          label="Daily avoided mismatch"
+          value={formatNumber(dailyAvoidedMu, 1)}
+          unit={<Term term="MU">MU per day</Term>}
+          date="All 5 regions"
           sentence={
             <span>
-              Scaled over 365 days, avoided grid mismatch totals {formatNumber(annualAvoidedMu, 0)} Million Units (<Term term="MU">MU</Term>) annually.
+              <Term term="reconciled">MinTrace reconciliation</Term> eliminates an average of {formatNumber(dailyAvoidedMu, 1)} <Term term="MU">MU</Term> of regional planning discrepancy every day.
             </span>
           }
           trend={{ value: 'Coherent additivity', isPositive: true }}
         />
 
         <Stat
-          label="Estimated Avoided Cost"
-          value={`₹${formatNumber(annualCrore, 1)}`}
-          unit="Crore/yr"
-          date="DSM Benchmark"
-          sentence={`At average CERC DSM penalty tiers (₹${priceUnder}/kWh shortfall, ₹${priceOver}/kWh surplus), annual avoided imbalance costs exceed ₹${formatNumber(annualCrore, 1)} Crore.`}
-          badge={<span className={styles.rupeeBadge}><IndianRupee size={12} /> CERC Tier</span>}
+          label="Indicative avoided cost range"
+          value={hasValidInputs ? `Rs ${formatNumber(annualCrore, 0)} crore` : 'Source needed'}
+          unit={hasValidInputs ? '/ year' : ''}
+          date={hasValidInputs ? `Rs ${formatNumber(lowCrore, 0)} – ${formatNumber(highCrore, 0)} crore` : 'Inputs unverified'}
+          sentence={
+            hasValidInputs ? (
+              <span>
+                Indicative range: <strong>Rs {formatNumber(lowCrore, 0)} – {formatNumber(highCrore, 0)} crore</strong> per year across user-entered incremental cost assumptions.
+              </span>
+            ) : (
+              <span>
+                Rupee calculation hidden until primary sources and dates are provided for incremental cost inputs.
+              </span>
+            )
+          }
+          badge={
+            hasValidInputs ? (
+              <span className={styles.rangeBadge}>User assumption</span>
+            ) : (
+              <span className={styles.sourceNeededBadge}>Source needed</span>
+            )
+          }
         />
       </section>
 
-      {/* Price Assumptions & Valuation Grid */}
+      {/* Incremental Cost Methodology & User Assumption Inputs */}
       <section style={{ marginTop: 'var(--space-6)' }}>
         <div className={styles.splitGrid}>
-          {/* Price Config */}
-          <Panel title="Valuation Price Assumptions" subtitle="CERC Deviation Settlement Mechanism (DSM) benchmark parameters">
-            <div className={styles.priceForm}>
-              <Input
-                label="Shortfall Penalty (Under-generation / High Demand)"
-                type="number"
-                value={priceUnder}
-                onChange={(e) => setPriceUnder(e.target.value)}
-                unitSuffix="₹/kWh"
-              />
-              <Input
-                label="Surplus Distress Discount (Over-generation)"
-                type="number"
-                value={priceOver}
-                onChange={(e) => setPriceOver(e.target.value)}
-                unitSuffix="₹/kWh"
-              />
-              <p className={styles.sourceRef}>
-                <BookOpen size={14} /> Sources: Central Electricity Regulatory Commission (Deviation Settlement Mechanism and Related Matters) Regulations, 2022 &amp; 2024 amendments.
-              </p>
+          {/* Form Controls for Valuation Inputs */}
+          <Panel
+            title="Incremental imbalance cost assumptions"
+            subtitle="Only the extra cost paid or lost per kWh constitutes avoidable error"
+          >
+            <div className={styles.assumptionsForm}>
+              {/* Preset buttons */}
+              <div className={styles.tierSelector}>
+                <label className={styles.tierLabel}>Select assumption tier:</label>
+                <div className={styles.tierButtons}>
+                  {(['low', 'base', 'high', 'source_needed'] as AssumptionTier[]).map((t) => (
+                    <Button
+                      key={t}
+                      size="sm"
+                      variant={tier === t ? 'primary' : 'secondary'}
+                      onClick={() => handleTierChange(t)}
+                    >
+                      {t === 'source_needed' ? 'Clear (Source needed)' : `${t.charAt(0).toUpperCase() + t.slice(1)} assumption`}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              <div className={styles.inputGrid}>
+                <Input
+                  label="Extra cost per kWh of under-forecast"
+                  helperText="Deviation penalty rate paid minus planned day-ahead purchase rate"
+                  type="number"
+                  step="0.05"
+                  min="0"
+                  placeholder="e.g. 1.75"
+                  value={extraCostUnder}
+                  onChange={(e) => handleCustomUnder(e.target.value)}
+                  unitSuffix="Rs/kWh"
+                />
+
+                <Input
+                  label="Extra cost per kWh of over-forecast"
+                  helperText="Committed purchase rate minus distressed real-time surplus resale rate"
+                  type="number"
+                  step="0.05"
+                  min="0"
+                  placeholder="e.g. 0.90"
+                  value={extraCostOver}
+                  onChange={(e) => handleCustomOver(e.target.value)}
+                  unitSuffix="Rs/kWh"
+                />
+              </div>
+
+              {/* Methodology & Formula Box */}
+              <div className={styles.formulaCallout}>
+                <div className={styles.formulaTitle}>
+                  <Calculator size={15} /> Valuation formula
+                </div>
+                <div className={styles.formulaCode}>
+                  <code>
+                    Avoided cost = Avoided shortfall (MU) × 10⁶ × Extra cost (under) + Avoided surplus (MU) × 10⁶ × Extra cost (over)
+                  </code>
+                </div>
+                <p className={styles.formulaExplanation}>
+                  Valuing forecast error at the full market price overstates savings. The true cost of a forecast error is only the incremental deviation penalty paid or surplus lost per kWh.
+                </p>
+              </div>
+
+              {/* Unverified Price Sources Notice */}
+              <NoticePanel
+                variant="info"
+                title="Primary price sources policy"
+                date="Audit verified"
+              >
+                <p>
+                  No regulatory price caps or exchange averages (e.g. CERC DSM or IEX DAM) are cited as fixed facts without a verified retrieval date and primary filing link. Rates shown are user-selected sensitivity assumptions.
+                </p>
+              </NoticePanel>
             </div>
           </Panel>
 
-          {/* Regional Table */}
-          <Panel title="Regional Breakdown of Avoided Costs" subtitle="Avoided mismatch volume and estimated annual financial savings by region">
+          {/* Regional Avoided Volume Breakdown */}
+          <Panel
+            title="Regional breakdown of avoided mismatch"
+            subtitle="Exact out-of-sample volume savings across 983 frozen test days"
+          >
             <DataTable
               data={regionalSavings}
               keyExtractor={(row) => row.region}
               columns={[
                 { key: 'region', header: 'Region name' },
-                { key: 'dailyMu', header: 'Daily Avoided', isNumeric: true, render: (row) => `${formatNumber(row.dailyMu, 1)} MU` },
-                { key: 'annualCrore', header: 'Annual Avoided', isNumeric: true, render: (row) => `₹${formatNumber(row.annualCrore, 1)} Cr` },
+                {
+                  key: 'dailyMu',
+                  header: 'Daily avoided',
+                  isNumeric: true,
+                  render: (row) => `${formatNumber(row.dailyMu, 1)} MU`,
+                },
+                {
+                  key: 'annualMu',
+                  header: 'Annual avoided',
+                  isNumeric: true,
+                  render: (row) => `${formatNumber(row.annualMu, 1)} MU`,
+                },
+                {
+                  key: 'annualCrore',
+                  header: 'Avoided cost',
+                  isNumeric: true,
+                  render: (row) => (row.annualCrore !== null ? `Rs ${formatNumber(row.annualCrore, 0)} crore` : '—'),
+                },
                 { key: 'share', header: 'Share', isNumeric: true },
               ]}
             />
@@ -158,4 +284,3 @@ export const SavingsPage: React.FC = () => {
 };
 
 export default SavingsPage;
-

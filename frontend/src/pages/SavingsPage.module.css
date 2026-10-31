@@ -19,6 +19,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
+  flex-wrap: wrap;
 }
 
 .statGrid {
@@ -27,47 +28,113 @@
   gap: var(--space-4);
 }
 
-.rupeeBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  background: var(--turf-green-dim);
-  border: 1px solid var(--turf-green);
-  color: var(--turf-green);
+.rangeBadge {
   font-size: 11px;
   font-family: var(--font-mono);
   font-weight: 600;
+  color: var(--safety-blue);
+  background: var(--safety-blue-dim);
+  border: 1px solid var(--safety-blue);
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+}
+
+.sourceNeededBadge {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: #B45309;
+  background: rgba(255, 213, 0, 0.12);
+  border: 1px solid #B45309;
   padding: 1px 6px;
   border-radius: var(--radius-pill);
 }
 
 .splitGrid {
   display: grid;
-  grid-template-columns: 360px 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: var(--space-6);
-  align-items: flex-start;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 960px) {
   .splitGrid {
     grid-template-columns: 1fr;
   }
 }
 
-.priceForm {
+.assumptionsForm {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
 }
 
-.sourceRef {
+.tierSelector {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
   gap: var(--space-2);
-  font-size: 11px;
-  color: var(--slate);
-  line-height: 1.4;
-  border-top: 1px solid var(--border-color);
-  padding-top: var(--space-3);
 }
 
+.tierLabel {
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  color: var(--slate);
+}
+
+.tierButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.inputGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+@media (max-width: 600px) {
+  .inputGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.formulaCallout {
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.formulaTitle {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--charcoal);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.formulaCode {
+  background: var(--ghost);
+  border: 1px solid rgba(88, 111, 124, 0.2);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  overflow-x: auto;
+}
+
+.formulaCode code {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--charcoal);
+  white-space: nowrap;
+}
+
+.formulaExplanation {
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-body);
+  color: var(--slate);
+  margin: 0;
+}
