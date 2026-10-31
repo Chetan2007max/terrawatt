@@ -55,11 +55,15 @@ html, body {
   transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
 }
 
-/* Clean Form Controls (section 2 rule: no default browser form controls) */
+/* Clean Form Controls & Typography enforcement */
 button, input, select, textarea {
-  font-family: inherit;
+  font-family: var(--font-sans);
   font-size: inherit;
   color: inherit;
+}
+
+h1, h2, h3, h4, h5, h6, p, span, label {
+  font-family: var(--font-sans);
 }
 
 button {

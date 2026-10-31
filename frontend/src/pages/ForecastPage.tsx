@@ -6,12 +6,13 @@ import { Select } from '../components/Select/Select';
 import { SegmentedControl } from '../components/SegmentedControl';
 import { DataTable } from '../components/DataTable/DataTable';
 import { Button } from '../components/Button/Button';
-import { Sparkline } from '../components/Sparkline/Sparkline';
+import { Checkbox } from '../components/Checkbox/Checkbox';
+import { DemandChart, ChartDataPoint } from '../components/DemandChart/DemandChart';
 import { HelpDrawer } from '../components/HelpDrawer/HelpDrawer';
 import { Term } from '../components/Term/Term';
 import { PAGE_COPY } from '../content/pageCopy';
 import { formatNumber, formatDate } from '../lib/format';
-import { Download, SlidersHorizontal, Eye } from 'lucide-react';
+import { Download, SlidersHorizontal } from 'lucide-react';
 import styles from './ForecastPage.module.css';
 
 export const ForecastPage: React.FC = () => {
@@ -20,16 +21,14 @@ export const ForecastPage: React.FC = () => {
 
   const [selectedNode, setSelectedNode] = useState(state.node || 'India');
   const [horizon, setHorizon] = useState<'7' | '14'>(String(state.horizon) === '7' ? '7' : '14');
-  const [show90Band, setShow90Band] = useState(true);
-  const [show95Band, setShow95Band] = useState(false);
+  const [showExpectedRange, setShowExpectedRange] = useState(true);
+  const [showComparison, setShowComparison] = useState(true);
 
   // Fetch forecast timeseries
-  const { data: forecastData, isLoading } = useForecast({
+  const { data: forecastData } = useForecast({
     node: selectedNode,
     horizon_days: parseInt(horizon, 10),
   });
-
-  const { data: nodesData } = useNodes();
 
   const handleNodeChange = (newNode: string) => {
     setSelectedNode(newNode);
@@ -49,13 +48,29 @@ export const ForecastPage: React.FC = () => {
     { ds: '2026-09-17', horizon: 5, base_forecast: 5300.0, reconciled_forecast: 5310.0, q90_lower: 5080.0, q90_upper: 5530.0, q95_lower: 5000.0, q95_upper: 5610.0 },
     { ds: '2026-09-18', horizon: 6, base_forecast: 5315.0, reconciled_forecast: 5325.0, q90_lower: 5090.0, q90_upper: 5550.0, q95_lower: 5010.0, q95_upper: 5630.0 },
     { ds: '2026-09-19', horizon: 7, base_forecast: 5330.0, reconciled_forecast: 5340.0, q90_lower: 5100.0, q90_upper: 5570.0, q95_lower: 5020.0, q95_upper: 5650.0 },
-  ];
+    { ds: '2026-09-20', horizon: 8, base_forecast: 5345.0, reconciled_forecast: 5355.0, q90_lower: 5115.0, q90_upper: 5590.0, q95_lower: 5025.0, q95_upper: 5670.0 },
+    { ds: '2026-09-21', horizon: 9, base_forecast: 5360.0, reconciled_forecast: 5370.0, q90_lower: 5125.0, q90_upper: 5610.0, q95_lower: 5035.0, q95_upper: 5690.0 },
+    { ds: '2026-09-22', horizon: 10, base_forecast: 5350.0, reconciled_forecast: 5360.2, q90_lower: 5110.0, q90_upper: 5600.0, q95_lower: 5020.0, q95_upper: 5680.0 },
+    { ds: '2026-09-23', horizon: 11, base_forecast: 5320.0, reconciled_forecast: 5330.0, q90_lower: 5080.0, q90_upper: 5570.0, q95_lower: 4990.0, q95_upper: 5650.0 },
+    { ds: '2026-09-24', horizon: 12, base_forecast: 5300.0, reconciled_forecast: 5310.0, q90_lower: 5060.0, q90_upper: 5550.0, q95_lower: 4970.0, q95_upper: 5630.0 },
+    { ds: '2026-09-25', horizon: 13, base_forecast: 5310.0, reconciled_forecast: 5320.0, q90_lower: 5070.0, q90_upper: 5560.0, q95_lower: 4980.0, q95_upper: 5640.0 },
+    { ds: '2026-09-26', horizon: 14, base_forecast: 5320.0, reconciled_forecast: 5330.2, q90_lower: 5080.0, q90_upper: 5570.0, q95_lower: 4990.0, q95_upper: 5650.0 },
+  ].slice(0, parseInt(horizon, 10));
 
-  const trendVals = series.map((s) => s.reconciled_forecast);
+  const chartData: ChartDataPoint[] = series.map((s) => ({
+    date: s.ds,
+    dateLabel: formatDate(s.ds).replace(/\s\d{4}$/, ''),
+    reconciled: s.reconciled_forecast,
+    unreconciled: s.base_forecast,
+    q90Lower: s.q90_lower,
+    q90Upper: s.q90_upper,
+    q95Lower: s.q95_lower,
+    q95Upper: s.q95_upper,
+  }));
 
   // Node select options
   const nodeOptions = [
-    { value: 'India', label: 'India (National Total)' },
+    { value: 'India', label: 'India (National total)' },
     { value: 'India/NR', label: 'Northern Region (NR)' },
     { value: 'India/WR', label: 'Western Region (WR)' },
     { value: 'India/SR', label: 'Southern Region (SR)' },
@@ -92,9 +107,10 @@ export const ForecastPage: React.FC = () => {
           <p className={styles.question}>{copy.question}</p>
         </div>
         <div className={styles.controlsBar}>
-          <div style={{ minWidth: '220px' }}>
+          <div style={{ minWidth: '240px' }}>
             <Select
-              label="Select Hierarchy Node"
+              label="Select grid node"
+              helperText="National total, region, or state leaf"
               value={selectedNode}
               onChange={(e) => handleNodeChange(e.target.value)}
               options={nodeOptions}
@@ -102,7 +118,7 @@ export const ForecastPage: React.FC = () => {
           </div>
           <div>
             <label className="text-xs text-slate" style={{ display: 'block', marginBottom: 'var(--space-1)' }}>
-              Horizon
+              Horizon range
             </label>
             <SegmentedControl<'7' | '14'>
               value={horizon}
@@ -118,62 +134,34 @@ export const ForecastPage: React.FC = () => {
 
       {/* Main Forecast Chart Panel */}
       <Panel
-        title={`Multi-Horizon Curve: ${selectedNode}`}
-        subtitle={`Daily demand trajectory for ${selectedNode} with non-parametric conformal calibration`}
+        title={`Multi-horizon curve: ${selectedNode}`}
+        subtitle="Shaded bands show the expected range. On past data the real value fell inside the dark band 90 percent of the time."
         headerAction={
           <div className={styles.bandToggles}>
-            <label className={styles.toggleItem}>
-              <input
-                type="checkbox"
-                checked={show90Band}
-                onChange={(e) => setShow90Band(e.target.checked)}
-              />
-              <span>90% Conformal Range</span>
-            </label>
-            <label className={styles.toggleItem}>
-              <input
-                type="checkbox"
-                checked={show95Band}
-                onChange={(e) => setShow95Band(e.target.checked)}
-              />
-              <span>95% Conformal Range</span>
-            </label>
+            <Checkbox
+              label="Show expected range"
+              checked={showExpectedRange}
+              onChange={setShowExpectedRange}
+            />
+            <Checkbox
+              label="Compare against separate desks"
+              checked={showComparison}
+              onChange={setShowComparison}
+            />
           </div>
         }
       >
-        <div className={styles.chartArea}>
-          <div className={styles.chartHeaderRow}>
-            <div className={styles.legend}>
-              <span className={styles.legendItem}>
-                <span className={styles.legendLineBlue} /> <Term term="reconciled">Reconciled Forecast</Term>
-              </span>
-              <span className={styles.legendItem}>
-                <span className={styles.legendLineSlate} /> Raw Unreconciled Baseline
-              </span>
-              {show90Band && (
-                <span className={styles.legendItem}>
-                  <span className={styles.legendBand90} /> 90% <Term term="prediction range">Prediction Range</Term>
-                </span>
-              )}
-            </div>
-            <span className={styles.chartMeta}>Target horizon: 1..{horizon} days</span>
-          </div>
-
-          <div className={styles.sparklineContainer}>
-            <Sparkline data={trendVals} width={1160} height={200} stroke="var(--safety-blue)" />
-          </div>
-
-          <p className={styles.chartCaption}>
-            Reconciled forecast for {selectedNode} begins at <strong>{formatNumber(series[0]?.reconciled_forecast || 0, 1)} MU</strong> on Day 1 and spans out to Day {horizon}.
-            {show90Band && ` The 90% conformal band is ±${formatNumber(Math.abs((series[0]?.q90_upper || 0) - (series[0]?.reconciled_forecast || 0)), 1)} MU based on historical out-of-fold calibration.`}
-          </p>
-        </div>
+        <DemandChart
+          data={chartData}
+          showExpectedRange={showExpectedRange}
+          showComparison={showComparison}
+        />
       </Panel>
 
       {/* Tabular Timeseries Data */}
       <div style={{ marginTop: 'var(--space-6)' }}>
         <Panel
-          title="Tabular Forecast Breakdown"
+          title="Tabular forecast breakdown"
           subtitle="Point estimates, lower/upper intervals, and raw comparison figures with tabular numbers"
           headerAction={
             <Button size="sm" variant="secondary" icon={<Download size={14} />} onClick={exportCsv}>
@@ -188,9 +176,9 @@ export const ForecastPage: React.FC = () => {
               { key: 'ds', header: 'Target date', render: (row) => formatDate(row.ds) },
               { key: 'horizon', header: 'Horizon day', isNumeric: true, render: (row) => `h=${row.horizon}` },
               { key: 'reconciled_forecast', header: 'Reconciled (MU)', isNumeric: true, render: (row) => formatNumber(row.reconciled_forecast, 1) },
-              { key: 'base_forecast', header: 'Raw base (MU)', isNumeric: true, render: (row) => formatNumber(row.base_forecast, 1) },
-              { key: 'q90_lower', header: '90% Lower (MU)', isNumeric: true, render: (row) => formatNumber(row.q90_lower, 1) },
-              { key: 'q90_upper', header: '90% Upper (MU)', isNumeric: true, render: (row) => formatNumber(row.q90_upper, 1) },
+              { key: 'base_forecast', header: 'Separate desks (MU)', isNumeric: true, render: (row) => formatNumber(row.base_forecast, 1) },
+              { key: 'q90_lower', header: 'Expected lower (MU)', isNumeric: true, render: (row) => formatNumber(row.q90_lower, 1) },
+              { key: 'q90_upper', header: 'Expected upper (MU)', isNumeric: true, render: (row) => formatNumber(row.q90_upper, 1) },
             ]}
           />
         </Panel>

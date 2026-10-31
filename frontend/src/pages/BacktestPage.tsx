@@ -59,7 +59,7 @@ export const BacktestPage: React.FC = () => {
           sentence={
             <span>
               <Term term="reconciled">Reconciled MinTrace</Term> achieves 2.09% weighted forecast error across 983 frozen{' '}
-              <Term term="hold-out test">test days</Term> (2024-01-04 to 2026-09-12).
+              <Term term="hold-out test">test days</Term> (4 Jan 2024 to 12 Sep 2026).
             </span>
           }
           trend={{ value: '0.42% vs Raw Base', isPositive: true }}
