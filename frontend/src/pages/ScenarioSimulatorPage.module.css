@@ -1,0 +1,109 @@
+.header {
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--space-4);
+}
+
+.question {
+  font-size: var(--font-size-body);
+  color: var(--slate);
+  margin-top: var(--space-2);
+}
+
+.layoutGrid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: var(--space-6);
+  align-items: flex-start;
+}
+
+@media (max-width: 960px) {
+  .layoutGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.formStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.pinList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.pinChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--ghost);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  font-size: 11px;
+  color: var(--slate);
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.pinChip:hover {
+  border-color: var(--charcoal);
+  color: var(--charcoal);
+}
+
+.pinActive {
+  background: var(--mist);
+  color: var(--charcoal);
+  font-weight: 600;
+  border-color: var(--slate);
+}
+
+.buttonRow {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.kpiBanner {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+  background: var(--ghost);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+}
+
+.kpiItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.kpiLabel {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--slate);
+  letter-spacing: 0.04em;
+}
+
+.coherenceBadgeRow {
+  margin-top: var(--space-3);
+}
+
+.verifiedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--turf-green-dim);
+  border: 1px solid var(--turf-green);
+  color: var(--turf-green);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+}
+
