@@ -1,0 +1,94 @@
+:root {
+  /* ─── Core Base Palette from Reference Swatch & User Request ─── */
+  --charcoal: #171717;       /* Primary text, dark top bar, dark surfaces (Deep Charcoal) */
+  --charcoal-black: #000000; /* Pure black swatch */
+  --forest-green: #06110C;   /* Deep Forest Green (user swatch) */
+  --slate: #586F7C;          /* Blue Slate (secondary text, axes, borders) */
+  --ghost: #F4F4F9;          /* Ghost White (clean flat canvas) */
+  --surface: #FFFFFF;        /* Elevated panels, cards, tables */
+  --mist: #B8DBD9;           /* Light Blue / Mist (soft fills, highlights, hover rows) */
+  
+  /* ─── User-Specified Accents ─── */
+  --safety-blue: #0A5DA8;    /* Primary actions, links, focus rings, main data series */
+  --safety-blue-hover: #084985;
+  --safety-blue-dim: rgba(10, 93, 168, 0.10);
+  
+  --electric-blue: #00A3FF;  /* Flow animation highlights, hover/selected accents on charcoal */
+  --hivis-yellow: #FFD500;   /* 'Watch' state fill with charcoal text & 1px charcoal border */
+  --turf-green: #04724D;     /* Turf Green: OK, coherent, positive change */
+  --turf-green-dim: rgba(4, 114, 77, 0.12);
+  --signal-red: #A31C1B;     /* Crimson Red: Critical state, demand shock drops */
+  --signal-red-dim: rgba(163, 28, 27, 0.12);
+
+  /* ─── Five Fixed Regional Colors (Color-blind safe & >= 3:1 graphical contrast) ─── */
+  --region-nr: #0A5DA8;      /* Northern Region: Safety Blue */
+  --region-wr: #586F7C;      /* Western Region: Blue Slate */
+  --region-sr: #04724D;      /* Southern Region: Turf Green */
+  --region-er: #B45309;      /* Eastern Region: Deep Amber */
+  --region-ner: #6B21A8;     /* North Eastern Region: Deep Plum */
+
+  /* ─── TopBar & Chrome Specific Tokens (Consistently dark engineering chrome) ─── */
+  --topbar-bg: #171717;
+  --topbar-border: rgba(88, 111, 124, 0.28);
+
+  /* ─── Spacing Scale (4px increments) ─── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* ─── Layout & Structural Geometry ─── */
+  --max-width: 1280px;
+  --radius: 6px;
+  --radius-sm: 4px;
+  --radius-pill: 9999px;
+  --border-color: rgba(88, 111, 124, 0.28);
+  --border: 1px solid var(--border-color);
+  --border-dark: 1px solid var(--charcoal);
+  
+  /* Shadows: ONLY permitted on menus and dialogs; zero card shadows per section 2 */
+  --shadow-menu: 0 4px 16px rgba(23, 23, 23, 0.14);
+  --shadow-modal: 0 12px 32px rgba(23, 23, 23, 0.22);
+
+  /* ─── Typography Sizes & Heights ─── */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-body: 16px;
+  --font-size-md: 20px;
+  --font-size-lg: 28px;
+  --font-size-hero: 40px;
+
+  --line-height-body: 1.5;
+  --line-height-heading: 1.2;
+
+  --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'IBM Plex Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* ─── Dark Theme (incorporating Charcoal Black #171717 & Forest Green #06110C) ─── */
+[data-theme="dark"] {
+  --topbar-bg: #040A07;      /* Ultra-deep forest black */
+  --topbar-border: rgba(184, 219, 217, 0.15);
+  --ghost: #06110C;          /* Deep Forest Green / Charcoal canvas */
+  --surface: #0E1A15;        /* Forest Charcoal elevated panels */
+  --charcoal: #F4F4F9;       /* Inverted text */
+  --slate: #8A9E99;          /* Subdued slate for dark surfaces */
+  --mist: #162C24;           /* Soft dark forest fill */
+  --border-color: rgba(184, 219, 217, 0.18);
+  --border-dark: 1px solid rgba(244, 244, 249, 0.2);
+  --safety-blue: #38BDF8;    /* Lighter electric sky blue for high dark contrast */
+  --safety-blue-hover: #0284C7;
+  --safety-blue-dim: rgba(56, 189, 248, 0.15);
+  --turf-green: #10B981;     /* Emerald green for dark canvas visibility */
+  --turf-green-dim: rgba(16, 185, 129, 0.15);
+  --signal-red: #F87171;     /* High-legibility crimson in dark mode */
+  --signal-red-dim: rgba(248, 113, 113, 0.15);
+  --shadow-menu: 0 4px 20px rgba(0, 0, 0, 0.6);
+  --shadow-modal: 0 12px 36px rgba(0, 0, 0, 0.7);
+}
+

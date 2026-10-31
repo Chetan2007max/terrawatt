@@ -1,0 +1,72 @@
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/500.css';
+@import '@fontsource/ibm-plex-sans/600.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: var(--charcoal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  line-height: var(--line-height-heading);
+  color: var(--charcoal);
+  font-weight: 600;
+  margin: 0;
+  text-transform: none; /* sentence case */
+}
+
+h1 { font-size: var(--font-size-hero); letter-spacing: -0.02em; }
+h2 { font-size: var(--font-size-lg); letter-spacing: -0.015em; }
+h3 { font-size: var(--font-size-md); }
+h4 { font-size: var(--font-size-body); }
+
+p {
+  margin: 0;
+  max-width: 70ch; /* Prose lines about 70 characters at most */
+}
+
+.text-xs { font-size: var(--font-size-xs); }
+.text-sm { font-size: var(--font-size-sm); }
+.text-body { font-size: var(--font-size-body); }
+.text-md { font-size: var(--font-size-md); }
+.text-lg { font-size: var(--font-size-lg); }
+.text-hero { font-size: var(--font-size-hero); }
+
+.text-charcoal { color: var(--charcoal); }
+.text-slate { color: var(--slate); }
+.text-safety { color: var(--safety-blue); }
+.text-turf { color: var(--turf-green); }
+.text-signal { color: var(--signal-red); }
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+.unit-suffix {
+  font-size: var(--font-size-xs);
+  color: var(--slate);
+  font-weight: 400;
+  margin-left: 2px;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.code-inline {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--mist);
+  color: var(--charcoal);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
