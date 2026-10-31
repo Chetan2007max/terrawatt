@@ -1,15 +1,15 @@
 import React from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { Shell } from './Shell';
-import OverviewPage from '../pages/OverviewPage';
-import ForecastPage from '../pages/ForecastPage';
-import EnergyFlowPage from '../pages/EnergyFlowPage';
-import ScenarioSimulatorPage from '../pages/ScenarioSimulatorPage';
-import BacktestPage from '../pages/BacktestPage';
-import SavingsPage from '../pages/SavingsPage';
-import MethodAndLimitsPage from '../pages/MethodAndLimitsPage';
-import { StyleGuidePage } from '../pages/StyleGuidePage';
-import { NotFoundPage } from '../pages/NotFoundPage';
+import OverviewPage from '../pages/OverviewPage.tsx';
+import ForecastPage from '../pages/ForecastPage.tsx';
+import EnergyFlowPage from '../pages/EnergyFlowPage.tsx';
+import ScenarioSimulatorPage from '../pages/ScenarioSimulatorPage.tsx';
+import BacktestPage from '../pages/BacktestPage.tsx';
+import SavingsPage from '../pages/SavingsPage.tsx';
+import MethodAndLimitsPage from '../pages/MethodAndLimitsPage.tsx';
+import { StyleGuidePage } from '../pages/StyleGuidePage.tsx';
+import { NotFoundPage } from '../pages/NotFoundPage.tsx';
 
 export const router = createBrowserRouter([
   {
