@@ -1,0 +1,165 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.chartSvgWrapper {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  min-height: 240px;
+  max-height: 320px;
+  display: block;
+}
+
+/* Expected Range Mist Fills (Section 3 rule: mist fill meeting >= 3:1 contrast against canvas) */
+.q95Band {
+  fill: #B8DBD9;
+  opacity: 0.35;
+}
+
+.q90Band {
+  fill: #B8DBD9;
+  opacity: 0.70;
+}
+
+[data-theme="dark"] .q95Band {
+  fill: #0A5DA8;
+  opacity: 0.20;
+}
+
+[data-theme="dark"] .q90Band {
+  fill: #0A5DA8;
+  opacity: 0.38;
+}
+
+/* Main Series: Solid Safety Blue line */
+.mainLine {
+  fill: none;
+  stroke: var(--safety-blue);
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Last Point Dot */
+.lastPointDot {
+  fill: var(--safety-blue);
+}
+
+.lastPointRing {
+  fill: none;
+  stroke: var(--safety-blue);
+  stroke-width: 1.5px;
+  opacity: 0.5;
+}
+
+/* Comparison Line: Slate, dashed */
+.comparisonLine {
+  fill: none;
+  stroke: var(--slate);
+  stroke-width: 1.75px;
+  stroke-dasharray: 5 4;
+}
+
+/* Direct Labels at Right-Hand Ends */
+.directLabelMain {
+  fill: var(--safety-blue);
+}
+
+.directLabelComp {
+  fill: var(--slate);
+}
+
+/* Hover Cursor */
+.hoverCursor {
+  stroke: var(--slate);
+  stroke-width: 1px;
+  stroke-dasharray: 3 3;
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-menu);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  color: var(--charcoal);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 180px;
+}
+
+.tooltipDate {
+  font-weight: 600;
+  color: var(--charcoal);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 3px;
+  margin-bottom: 2px;
+}
+
+.tooltipValRow,
+.tooltipRangeRow,
+.tooltipCompRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.tooltipLabel {
+  color: var(--slate);
+  flex: 1;
+}
+
+.tooltipDotMain {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--safety-blue);
+}
+
+.tooltipDotBand {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--mist);
+}
+
+.tooltipDotComp {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--slate);
+}
+
+/* Caption */
+.captionRow {
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--border-color);
+}
+
+.captionText {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-body);
+  color: var(--slate);
+  margin: 0;
+}
+
+.captionText strong {
+  color: var(--charcoal);
+}
