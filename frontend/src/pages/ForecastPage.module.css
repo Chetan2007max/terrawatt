@@ -1,0 +1,113 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.question {
+  font-size: var(--font-size-body);
+  color: var(--slate);
+  margin-top: var(--space-2);
+}
+
+.controlsBar {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.bandToggles {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.toggleItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--slate);
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggleItem input[type="checkbox"] {
+  accent-color: var(--safety-blue);
+}
+
+.chartArea {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.chartHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-xs);
+  color: var(--slate);
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legendLineBlue {
+  width: 16px;
+  height: 3px;
+  background: var(--safety-blue);
+  border-radius: 2px;
+}
+
+.legendLineSlate {
+  width: 16px;
+  height: 2px;
+  background: var(--slate);
+  border-radius: 1px;
+}
+
+.legendBand90 {
+  width: 16px;
+  height: 10px;
+  background: var(--mist);
+  opacity: 0.8;
+  border: 1px dashed var(--slate);
+}
+
+.chartMeta {
+  font-family: var(--font-mono);
+}
+
+.sparklineContainer {
+  width: 100%;
+  overflow-x: auto;
+  background: var(--ghost);
+  border: 1px solid rgba(88, 111, 124, 0.15);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+}
+
+.chartCaption {
+  font-size: var(--font-size-xs);
+  color: var(--charcoal);
+  line-height: 1.4;
+}
+
