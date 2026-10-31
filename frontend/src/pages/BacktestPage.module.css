@@ -1,0 +1,32 @@
+.header {
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: var(--space-4);
+}
+
+.question {
+  font-size: var(--font-size-body);
+  color: var(--slate);
+  margin-top: var(--space-2);
+}
+
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+.auditBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--turf-green-dim);
+  border: 1px solid var(--turf-green);
+  color: var(--turf-green);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+}
+
