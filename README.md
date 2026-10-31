@@ -74,11 +74,15 @@ terrawatt/
 ├── nginx.conf                      # High-performance Nginx config with API reverse proxy & SPA routing
 ├── .env.example                    # Environment configuration template
 ├── requirements.txt                # Pinned backend dependencies
-├── DECISIONS.md                    # Formal architectural decisions log (Decisions 001 - 012)
-├── MODEL_CARD.md                   # Model provenance, metrics tables, and conformal coverage
-├── data_dictionary.md              # Column definitions, units, missingness, and supply audits
+├── docs/                           # Consolidated System & Design Documentation
+│   ├── architecture.md             # Complete technical architecture & pipeline specification
+│   ├── usability-notes.md          # Control room UX audit & Nielsen Norman evaluation
+│   ├── DECISIONS.md                # Formal architectural decisions log (Decisions 001 - 012)
+│   ├── MODEL_CARD.md               # Model provenance, metrics tables, and conformal coverage
+│   ├── data_dictionary.md          # Column definitions, units, missingness, and supply audits
+│   └── screenshots/                # Responsive layout & theme visual verification captures
 │
-├── api/                            # FastAPI Microservice
+├── api/                            # FastAPI Microservice (Port 8000)
 │   ├── main.py                     # Versioned endpoints (/api/v1), CORS, request logging
 │   ├── model_service.py            # Startup artifact preloader, zero in-request training
 │   └── schemas.py                  # Pydantic v2 validation contracts
@@ -106,19 +110,24 @@ terrawatt/
 │   ├── test_savings.py             # Bootstrap CI & rupee valuation tests
 │   └── test_api.py                 # FastAPI endpoint test client suites
 │
-└── frontend/                       # React 19 + Vite Control-Room Dashboard
+└── frontend/                       # React 19 + TypeScript Strict + Vite Control Room
     ├── src/
-    │   ├── api.js                  # Frontend API client
-    │   ├── App.jsx                 # Hash router and navigation bar
-    │   ├── App.css                 # Control-room styling (dark teal #0E1A1D, amber #E8A33D)
-    │   └── pages/                  # 7 Modular Dashboard Pages
-    │       ├── OverviewPage.jsx
-    │       ├── ForecastPage.jsx
-    │       ├── HierarchyExplorerPage.jsx
-    │       ├── ScenarioSimulatorPage.jsx
-    │       ├── BacktestPage.jsx
-    │       ├── SavingsPage.jsx
-    │       └── MethodAndLimitsPage.jsx
+    │   ├── api/                    # Typed OpenAPI Client & TanStack Queries
+    │   ├── app/                    # Shell with TopBar, Theme Switcher & Router
+    │   ├── components/             # Primitives: Button, Stat, Panel, Select, Slider, Term, HelpDrawer
+    │   ├── content/                # Grade-8 plain language copy & interactive Glossary
+    │   ├── features/               # 3-Column Energy Flow Sankey, Node Panel, Replay Controls
+    │   ├── lib/                    # Bookmarkable URL state sync, number & date formatters
+    │   ├── pages/                  # 7 Redesigned Control-Room Pages
+    │   │   ├── OverviewPage.tsx
+    │   │   ├── ForecastPage.tsx
+    │   │   ├── EnergyFlowPage.tsx
+    │   │   ├── ScenarioSimulatorPage.tsx
+    │   │   ├── BacktestPage.tsx
+    │   │   ├── SavingsPage.tsx
+    │   │   ├── MethodAndLimitsPage.tsx
+    │   │   └── StyleGuidePage.tsx
+    │   └── styles/                 # CSS Tokens (Charcoal, Forest, Safety/Electric Blue, Turf Green)
     └── package.json
 ```
 
