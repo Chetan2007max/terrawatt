@@ -1,0 +1,1765 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "TerraWatt v2 API",
+    "description": "Hierarchical Electricity Demand Forecasting, Coherent Reconciliation, What-If Scenario Simulation, Stress Indicators, and Avoided Mismatch Estimator.",
+    "version": "2.0.0"
+  },
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Api Health",
+        "description": "Health check endpoint.",
+        "operationId": "api_health_api_v1_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/meta": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Api Meta",
+        "description": "Returns dataset dates, split metadata, library versions, and git hash.",
+        "operationId": "api_meta_api_v1_meta_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetaResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/nodes": {
+      "get": {
+        "tags": [
+          "Hierarchy"
+        ],
+        "summary": "Api Nodes",
+        "description": "Lists all 51 nodes across National, Regional, and State levels with hierarchy relations.",
+        "operationId": "api_nodes_api_v1_nodes_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NodesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forecast": {
+      "get": {
+        "tags": [
+          "Forecast"
+        ],
+        "summary": "Api Forecast",
+        "description": "Returns multi-horizon forecast timeseries for a given node with split-conformal\nprediction interval bands (90% and 95%).",
+        "operationId": "api_forecast_api_v1_forecast_get",
+        "parameters": [
+          {
+            "name": "node",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Node unique_id (e.g. 'India', 'India/NR', 'India/NR/Delhi')",
+              "default": "India",
+              "title": "Node"
+            },
+            "description": "Node unique_id (e.g. 'India', 'India/NR', 'India/NR/Delhi')"
+          },
+          {
+            "name": "horizon",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 14,
+              "minimum": 1,
+              "description": "Forecast horizon in days (1..14)",
+              "default": 14,
+              "title": "Horizon"
+            },
+            "description": "Forecast horizon in days (1..14)"
+          },
+          {
+            "name": "intervals",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Whether to include split-conformal prediction intervals",
+              "default": true,
+              "title": "Intervals"
+            },
+            "description": "Whether to include split-conformal prediction intervals"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hierarchy": {
+      "get": {
+        "tags": [
+          "Hierarchy"
+        ],
+        "summary": "Api Hierarchy",
+        "description": "Returns complete 3-level hierarchy snapshot (National, 5 Regions, 45 Leaves)\nand reports the exact mathematical coherence gap in MU/day.",
+        "operationId": "api_hierarchy_api_v1_hierarchy_get",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Date in YYYY-MM-DD (defaults to latest available)",
+              "title": "Date"
+            },
+            "description": "Date in YYYY-MM-DD (defaults to latest available)"
+          },
+          {
+            "name": "horizon",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 14,
+              "minimum": 1,
+              "description": "Forecast horizon 1..14",
+              "default": 1,
+              "title": "Horizon"
+            },
+            "description": "Forecast horizon 1..14"
+          },
+          {
+            "name": "mode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(actual|unreconciled|reconciled)$",
+              "description": "Display mode",
+              "default": "reconciled",
+              "title": "Mode"
+            },
+            "description": "Display mode"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HierarchySnapshotResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/scenario": {
+      "post": {
+        "tags": [
+          "Scenario Simulation"
+        ],
+        "summary": "Api Scenario",
+        "description": "Simulates a what-if demand shock at any node and computes both Proportional\nand Covariance-Aware allocations across all 51 nodes, verifying mathematical coherence.\nIncludes historical bounds warnings, physical non-negativity checks, and heuristic stress alerts.",
+        "operationId": "api_scenario_api_v1_scenario_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScenarioRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScenarioResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/alerts": {
+      "get": {
+        "tags": [
+          "Stress Indicators"
+        ],
+        "summary": "Api Alerts",
+        "description": "Evaluates 4 heuristic stress indicators: Demand Stress, Supply Deficit,\nHistorical Shortage Frequency (with sample size gating), and Low Demand Backing-Down.",
+        "operationId": "api_alerts_api_v1_alerts_get",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Reference date YYYY-MM-DD",
+              "title": "Date"
+            },
+            "description": "Reference date YYYY-MM-DD"
+          },
+          {
+            "name": "region",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter for specific region: NR, WR, SR, ER, NER, or India",
+              "title": "Region"
+            },
+            "description": "Filter for specific region: NR, WR, SR, ER, NER, or India"
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 12,
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Calendar month 1..12",
+              "title": "Month"
+            },
+            "description": "Calendar month 1..12"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/backtest": {
+      "get": {
+        "tags": [
+          "Backtesting"
+        ],
+        "summary": "Api Backtest",
+        "description": "Returns actual vs unreconciled vs reconciled forecasts side-by-side on the holdout test set,\nwith calculated absolute errors and summary metrics (MAE, RMSE, WAPE).",
+        "operationId": "api_backtest_api_v1_backtest_get",
+        "parameters": [
+          {
+            "name": "node",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Node unique_id",
+              "default": "India",
+              "title": "Node"
+            },
+            "description": "Node unique_id"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Start date YYYY-MM-DD",
+              "title": "Start Date"
+            },
+            "description": "Start date YYYY-MM-DD"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "End date YYYY-MM-DD",
+              "title": "End Date"
+            },
+            "description": "End date YYYY-MM-DD"
+          },
+          {
+            "name": "horizon",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 14,
+              "minimum": 1,
+              "description": "Forecast horizon 1..14",
+              "default": 1,
+              "title": "Horizon"
+            },
+            "description": "Forecast horizon 1..14"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BacktestResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/metrics": {
+      "get": {
+        "tags": [
+          "Evaluation"
+        ],
+        "summary": "Api Metrics",
+        "description": "Returns official frozen test set metrics by hierarchy level and horizon.",
+        "operationId": "api_metrics_api_v1_metrics_get",
+        "parameters": [
+          {
+            "name": "level",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by level: National, Regional, State/Bottom, All Nodes",
+              "title": "Level"
+            },
+            "description": "Filter by level: National, Regional, State/Bottom, All Nodes"
+          },
+          {
+            "name": "horizon",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer",
+                  "maximum": 14,
+                  "minimum": 1
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Filter by horizon 1..14",
+              "title": "Horizon"
+            },
+            "description": "Filter by horizon 1..14"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetricsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/savings": {
+      "post": {
+        "tags": [
+          "Savings Estimator"
+        ],
+        "summary": "Api Savings",
+        "description": "Estimates avoided forecast mismatch (MU/year) relative to selected baseline,\ncomputes 95% week-block bootstrap confidence interval, rupee valuation across Low,\nBase, and High market benchmarks, and reports planning inconsistency separately.",
+        "operationId": "api_savings_api_v1_savings_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SavingsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavingsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "Legacy"
+        ],
+        "summary": "Legacy Health",
+        "operationId": "legacy_health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forecast/hierarchy/nodes": {
+      "get": {
+        "tags": [
+          "Legacy"
+        ],
+        "summary": "Legacy Nodes",
+        "operationId": "legacy_nodes_forecast_hierarchy_nodes_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forecast/hierarchy": {
+      "get": {
+        "tags": [
+          "Legacy"
+        ],
+        "summary": "Legacy Hierarchy",
+        "operationId": "legacy_hierarchy_forecast_hierarchy_get",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/forecast/{node_id}": {
+      "get": {
+        "tags": [
+          "Legacy"
+        ],
+        "summary": "Legacy Forecast",
+        "operationId": "legacy_forecast_forecast__node_id__get",
+        "parameters": [
+          {
+            "name": "node_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Node Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ingest": {
+      "post": {
+        "tags": [
+          "Legacy"
+        ],
+        "summary": "Legacy Ingest",
+        "operationId": "legacy_ingest_ingest_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IngestPayload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AlertItem": {
+        "properties": {
+          "indicator_type": {
+            "type": "string",
+            "title": "Indicator Type"
+          },
+          "region": {
+            "type": "string",
+            "title": "Region"
+          },
+          "severity": {
+            "type": "string",
+            "title": "Severity"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "evidence": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Evidence"
+          },
+          "is_heuristic": {
+            "type": "boolean",
+            "title": "Is Heuristic",
+            "default": true
+          },
+          "caveat": {
+            "type": "string",
+            "title": "Caveat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "indicator_type",
+          "region",
+          "severity",
+          "title",
+          "message",
+          "evidence",
+          "caveat"
+        ],
+        "title": "AlertItem"
+      },
+      "AlertsResponse": {
+        "properties": {
+          "total_alerts": {
+            "type": "integer",
+            "title": "Total Alerts"
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          },
+          "month": {
+            "type": "integer",
+            "title": "Month"
+          },
+          "alerts": {
+            "items": {
+              "$ref": "#/components/schemas/AlertItem"
+            },
+            "type": "array",
+            "title": "Alerts"
+          },
+          "caveat": {
+            "type": "string",
+            "title": "Caveat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total_alerts",
+          "month",
+          "alerts",
+          "caveat"
+        ],
+        "title": "AlertsResponse"
+      },
+      "BacktestPoint": {
+        "properties": {
+          "ds": {
+            "type": "string",
+            "title": "Ds"
+          },
+          "actual": {
+            "type": "number",
+            "title": "Actual"
+          },
+          "unreconciled": {
+            "type": "number",
+            "title": "Unreconciled"
+          },
+          "reconciled": {
+            "type": "number",
+            "title": "Reconciled"
+          },
+          "error_unreconciled": {
+            "type": "number",
+            "title": "Error Unreconciled"
+          },
+          "error_reconciled": {
+            "type": "number",
+            "title": "Error Reconciled"
+          },
+          "abs_error_unreconciled": {
+            "type": "number",
+            "title": "Abs Error Unreconciled"
+          },
+          "abs_error_reconciled": {
+            "type": "number",
+            "title": "Abs Error Reconciled"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ds",
+          "actual",
+          "unreconciled",
+          "reconciled",
+          "error_unreconciled",
+          "error_reconciled",
+          "abs_error_unreconciled",
+          "abs_error_reconciled"
+        ],
+        "title": "BacktestPoint"
+      },
+      "BacktestResponse": {
+        "properties": {
+          "node_id": {
+            "type": "string",
+            "title": "Node Id"
+          },
+          "horizon": {
+            "type": "integer",
+            "title": "Horizon"
+          },
+          "start_date": {
+            "type": "string",
+            "title": "Start Date"
+          },
+          "end_date": {
+            "type": "string",
+            "title": "End Date"
+          },
+          "sample_days": {
+            "type": "integer",
+            "title": "Sample Days"
+          },
+          "metrics_summary": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Metrics Summary"
+          },
+          "series": {
+            "items": {
+              "$ref": "#/components/schemas/BacktestPoint"
+            },
+            "type": "array",
+            "title": "Series"
+          }
+        },
+        "type": "object",
+        "required": [
+          "node_id",
+          "horizon",
+          "start_date",
+          "end_date",
+          "sample_days",
+          "metrics_summary",
+          "series"
+        ],
+        "title": "BacktestResponse"
+      },
+      "ForecastPoint": {
+        "properties": {
+          "ds": {
+            "type": "string",
+            "title": "Ds"
+          },
+          "horizon": {
+            "type": "integer",
+            "title": "Horizon"
+          },
+          "actual": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actual"
+          },
+          "base_forecast": {
+            "type": "number",
+            "title": "Base Forecast"
+          },
+          "reconciled_forecast": {
+            "type": "number",
+            "title": "Reconciled Forecast"
+          },
+          "q90_lower": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Q90 Lower"
+          },
+          "q90_upper": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Q90 Upper"
+          },
+          "q95_lower": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Q95 Lower"
+          },
+          "q95_upper": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Q95 Upper"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ds",
+          "horizon",
+          "base_forecast",
+          "reconciled_forecast"
+        ],
+        "title": "ForecastPoint"
+      },
+      "ForecastResponse": {
+        "properties": {
+          "node_id": {
+            "type": "string",
+            "title": "Node Id"
+          },
+          "horizon_days": {
+            "type": "integer",
+            "title": "Horizon Days"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit",
+            "default": "MU/day"
+          },
+          "series": {
+            "items": {
+              "$ref": "#/components/schemas/ForecastPoint"
+            },
+            "type": "array",
+            "title": "Series"
+          }
+        },
+        "type": "object",
+        "required": [
+          "node_id",
+          "horizon_days",
+          "series"
+        ],
+        "title": "ForecastResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version",
+            "default": "v2.0"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "HealthResponse"
+      },
+      "HierarchyNodeValue": {
+        "properties": {
+          "node_id": {
+            "type": "string",
+            "title": "Node Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "value": {
+            "type": "number",
+            "title": "Value"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit",
+            "default": "MU/day"
+          },
+          "children": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Children",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "node_id",
+          "name",
+          "value"
+        ],
+        "title": "HierarchyNodeValue"
+      },
+      "HierarchySnapshotResponse": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "title": "Date"
+          },
+          "horizon": {
+            "type": "integer",
+            "title": "Horizon"
+          },
+          "mode": {
+            "type": "string",
+            "title": "Mode"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit",
+            "default": "MU/day"
+          },
+          "national": {
+            "$ref": "#/components/schemas/HierarchyNodeValue"
+          },
+          "regions": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/HierarchyNodeValue"
+            },
+            "type": "object",
+            "title": "Regions"
+          },
+          "bottom_level": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/HierarchyNodeValue"
+            },
+            "type": "object",
+            "title": "Bottom Level"
+          },
+          "coherence_gap_mu": {
+            "type": "number",
+            "title": "Coherence Gap Mu"
+          },
+          "is_coherent": {
+            "type": "boolean",
+            "title": "Is Coherent"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "horizon",
+          "mode",
+          "national",
+          "regions",
+          "bottom_level",
+          "coherence_gap_mu",
+          "is_coherent"
+        ],
+        "title": "HierarchySnapshotResponse"
+      },
+      "IngestPayload": {
+        "properties": {
+          "node_id": {
+            "type": "string",
+            "title": "Node Id"
+          },
+          "date": {
+            "type": "string",
+            "title": "Date"
+          },
+          "actual_value": {
+            "type": "number",
+            "title": "Actual Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "node_id",
+          "date",
+          "actual_value"
+        ],
+        "title": "IngestPayload"
+      },
+      "MetaResponse": {
+        "properties": {
+          "model_version": {
+            "type": "string",
+            "title": "Model Version"
+          },
+          "data_source": {
+            "type": "string",
+            "title": "Data Source"
+          },
+          "reliable_data_start": {
+            "type": "string",
+            "title": "Reliable Data Start"
+          },
+          "reliable_data_end": {
+            "type": "string",
+            "title": "Reliable Data End"
+          },
+          "total_reliable_rows": {
+            "type": "integer",
+            "title": "Total Reliable Rows"
+          },
+          "train_full_period": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Train Full Period"
+          },
+          "validation_block": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Validation Block"
+          },
+          "test_holdout_period": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Test Holdout Period"
+          },
+          "library_versions": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Library Versions"
+          },
+          "git_hash": {
+            "type": "string",
+            "title": "Git Hash"
+          },
+          "drift_status": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Drift Status"
+          },
+          "staleness_warning": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Staleness Warning"
+          },
+          "retraining_instructions": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retraining Instructions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "model_version",
+          "data_source",
+          "reliable_data_start",
+          "reliable_data_end",
+          "total_reliable_rows",
+          "train_full_period",
+          "validation_block",
+          "test_holdout_period",
+          "library_versions",
+          "git_hash"
+        ],
+        "title": "MetaResponse"
+      },
+      "MetricsResponse": {
+        "properties": {
+          "test_metrics_by_level": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Test Metrics By Level"
+          },
+          "test_metrics_by_horizon": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Test Metrics By Horizon"
+          },
+          "conformal_coverage": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Conformal Coverage"
+          }
+        },
+        "type": "object",
+        "required": [
+          "test_metrics_by_level",
+          "test_metrics_by_horizon",
+          "conformal_coverage"
+        ],
+        "title": "MetricsResponse"
+      },
+      "NodeMetadata": {
+        "properties": {
+          "node_id": {
+            "type": "string",
+            "title": "Node Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "level": {
+            "type": "string",
+            "title": "Level"
+          },
+          "parent": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent"
+          },
+          "children": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Children",
+            "default": []
+          },
+          "is_real": {
+            "type": "boolean",
+            "title": "Is Real",
+            "default": true
+          },
+          "historical_range": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Historical Range"
+          }
+        },
+        "type": "object",
+        "required": [
+          "node_id",
+          "name",
+          "level"
+        ],
+        "title": "NodeMetadata"
+      },
+      "NodesResponse": {
+        "properties": {
+          "total_nodes": {
+            "type": "integer",
+            "title": "Total Nodes"
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/NodeMetadata"
+            },
+            "type": "array",
+            "title": "Nodes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total_nodes",
+          "nodes"
+        ],
+        "title": "NodesResponse"
+      },
+      "SavingsRequest": {
+        "properties": {
+          "baseline": {
+            "type": "string",
+            "title": "Baseline",
+            "description": "unreconciled, seasonal_naive_7d, seasonal_naive_364d, day_ahead_persistence",
+            "default": "unreconciled"
+          },
+          "price_under": {
+            "type": "number",
+            "title": "Price Under",
+            "description": "Shortfall / emergency procurement price per kWh in Rupees",
+            "default": 6.5
+          },
+          "price_over": {
+            "type": "number",
+            "title": "Price Over",
+            "description": "Surplus / DSM distress sale price per kWh in Rupees",
+            "default": 3.5
+          },
+          "horizon": {
+            "type": "integer",
+            "title": "Horizon",
+            "description": "Horizon 1..14",
+            "default": 1
+          }
+        },
+        "type": "object",
+        "title": "SavingsRequest"
+      },
+      "SavingsResponse": {
+        "properties": {
+          "baseline_name": {
+            "type": "string",
+            "title": "Baseline Name"
+          },
+          "horizon": {
+            "type": "integer",
+            "title": "Horizon"
+          },
+          "test_days_count": {
+            "type": "integer",
+            "title": "Test Days Count"
+          },
+          "test_period_start": {
+            "type": "string",
+            "title": "Test Period Start"
+          },
+          "test_period_end": {
+            "type": "string",
+            "title": "Test Period End"
+          },
+          "mean_daily_baseline_mismatch_mu": {
+            "type": "number",
+            "title": "Mean Daily Baseline Mismatch Mu"
+          },
+          "mean_daily_reconciled_mismatch_mu": {
+            "type": "number",
+            "title": "Mean Daily Reconciled Mismatch Mu"
+          },
+          "mean_daily_avoided_mismatch_mu": {
+            "type": "number",
+            "title": "Mean Daily Avoided Mismatch Mu"
+          },
+          "annualized_avoided_mismatch_mu": {
+            "type": "number",
+            "title": "Annualized Avoided Mismatch Mu"
+          },
+          "pct_lower_than_baseline": {
+            "type": "number",
+            "title": "Pct Lower Than Baseline"
+          },
+          "bootstrap_ci_95": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Bootstrap Ci 95"
+          },
+          "regional_breakdown": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Regional Breakdown"
+          },
+          "valuation": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Valuation"
+          },
+          "planning_inconsistency": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Planning Inconsistency"
+          },
+          "headline_text": {
+            "type": "string",
+            "title": "Headline Text"
+          },
+          "note": {
+            "type": "string",
+            "title": "Note"
+          },
+          "citable_price_sources": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Citable Price Sources"
+          }
+        },
+        "type": "object",
+        "required": [
+          "baseline_name",
+          "horizon",
+          "test_days_count",
+          "test_period_start",
+          "test_period_end",
+          "mean_daily_baseline_mismatch_mu",
+          "mean_daily_reconciled_mismatch_mu",
+          "mean_daily_avoided_mismatch_mu",
+          "annualized_avoided_mismatch_mu",
+          "pct_lower_than_baseline",
+          "bootstrap_ci_95",
+          "regional_breakdown",
+          "valuation",
+          "planning_inconsistency",
+          "headline_text",
+          "note",
+          "citable_price_sources"
+        ],
+        "title": "SavingsResponse"
+      },
+      "ScenarioRequest": {
+        "properties": {
+          "target_node": {
+            "type": "string",
+            "title": "Target Node",
+            "description": "Node unique_id to shock, e.g. 'India', 'India/NR', 'India/NR/Delhi'"
+          },
+          "delta": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Delta",
+            "description": "Additive change in MU/day"
+          },
+          "pct_change": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pct Change",
+            "description": "Percentage change (+/- 15% slider)"
+          },
+          "new_value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "New Value",
+            "description": "Explicit new target value in MU/day"
+          },
+          "pinned_nodes": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pinned Nodes",
+            "description": "List of node unique_ids held strictly fixed",
+            "default": []
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date",
+            "description": "Reference forecast date (default latest)"
+          },
+          "horizon": {
+            "type": "integer",
+            "title": "Horizon",
+            "description": "Forecast horizon 1..14",
+            "default": 1
+          }
+        },
+        "type": "object",
+        "required": [
+          "target_node"
+        ],
+        "title": "ScenarioRequest"
+      },
+      "ScenarioResponse": {
+        "properties": {
+          "target_node": {
+            "type": "string",
+            "title": "Target Node"
+          },
+          "base_value": {
+            "type": "number",
+            "title": "Base Value"
+          },
+          "new_value": {
+            "type": "number",
+            "title": "New Value"
+          },
+          "delta": {
+            "type": "number",
+            "title": "Delta"
+          },
+          "pct_change": {
+            "type": "number",
+            "title": "Pct Change"
+          },
+          "pinned_nodes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Pinned Nodes"
+          },
+          "base_forecast": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Base Forecast"
+          },
+          "proportional": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Proportional"
+          },
+          "covariance_aware": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Covariance Aware"
+          },
+          "diff_cov_minus_prop": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Diff Cov Minus Prop"
+          },
+          "coherence_verified": {
+            "type": "boolean",
+            "title": "Coherence Verified"
+          },
+          "max_coherence_diff": {
+            "type": "number",
+            "title": "Max Coherence Diff"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          },
+          "flags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Flags"
+          },
+          "alerts": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Alerts"
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "target_node",
+          "base_value",
+          "new_value",
+          "delta",
+          "pct_change",
+          "pinned_nodes",
+          "base_forecast",
+          "proportional",
+          "covariance_aware",
+          "diff_cov_minus_prop",
+          "coherence_verified",
+          "max_coherence_diff",
+          "warnings",
+          "flags",
+          "alerts",
+          "disclaimer"
+        ],
+        "title": "ScenarioResponse"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
