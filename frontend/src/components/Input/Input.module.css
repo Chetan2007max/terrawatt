@@ -62,3 +62,9 @@
   color: var(--signal-red);
 }
 
+.helperText {
+  font-size: var(--font-size-xs);
+  color: var(--slate);
+  margin-top: 2px;
+}
+

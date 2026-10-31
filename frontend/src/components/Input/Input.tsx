@@ -3,6 +3,7 @@ import styles from './Input.module.css';
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
+  helperText?: string;
   unitSuffix?: string;
   error?: string;
   className?: string;
@@ -10,6 +11,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 
 export const Input: React.FC<InputProps> = ({
   label,
+  helperText,
   unitSuffix,
   error,
   className = '',
@@ -29,6 +31,7 @@ export const Input: React.FC<InputProps> = ({
         <input id={inputId} className={styles.input} {...props} />
         {unitSuffix && <span className={styles.unitSuffix}>{unitSuffix}</span>}
       </div>
+      {helperText && !error && <span className={styles.helperText}>{helperText}</span>}
       {error && <span className={styles.errorText}>{error}</span>}
     </div>
   );

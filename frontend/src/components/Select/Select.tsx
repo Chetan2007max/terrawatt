@@ -9,12 +9,14 @@ export interface SelectOption {
 
 export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
+  helperText?: string;
   options: SelectOption[];
   className?: string;
 }
 
 export const Select: React.FC<SelectProps> = ({
   label,
+  helperText,
   options,
   className = '',
   id,
@@ -39,6 +41,7 @@ export const Select: React.FC<SelectProps> = ({
         </select>
         <ChevronDown size={15} strokeWidth={1.5} className={styles.icon} />
       </div>
+      {helperText && <span className={styles.helperText}>{helperText}</span>}
     </div>
   );
 };
